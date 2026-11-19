@@ -1,0 +1,110 @@
+[
+  {
+    "key": "coach-tangtang",
+    "prompt": "Use case: photorealistic-natural. Asset: portrait for a billiards club app, fictional adult female billiards assistant named 糖糖, age 24. Beautiful approachable East Asian woman, shoulder-length chestnut hair with soft fringe, warm sweet smile, tasteful ivory collared shirt and dark forest green fitted waistcoat, professional billiards coach attire. Waist-up portrait, holding a pool cue lightly at her side, hands anatomically correct. Elegant vintage billiards lounge softly blurred, dark green felt and warm brass lighting. Premium editorial photography, realistic skin texture, natural beauty, refined and friendly, not sexualized. Vertical 4:5 composition, whole head with breathing space, subject centered. No text, no numbers, no logos, no watermark. New imaginary person, not a real celebrity.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-044571da-3bc2-417e-b8ca-f3adafd1c522.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "糖糖",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-tangtang.png"
+  },
+  {
+    "key": "coach-mianmian",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 25, named 绵绵. long black softly waved hair, oval face, gentle smile, ivory blouse and taupe waistcoat. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-69d65167-287a-4cf7-8ae1-a3a5f7ee1cbd.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "绵绵",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-mianmian.png"
+  },
+  {
+    "key": "coach-nuonuo",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 24, named 糯糯. sleek black bob haircut, bright intelligent smile, forest green collared shirt and charcoal vest. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-dc1a62ed-79ec-402d-96bf-7aea88d5233b.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "糯糯",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-nuonuo.png"
+  },
+  {
+    "key": "coach-tianxin",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 26, named 恬欣. dark brown ponytail, elegant defined cheekbones, calm confident smile, cream shirt and emerald vest. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-675b7223-9668-438a-a062-2a21bfcdcea2.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "恬欣",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-tianxin.png"
+  },
+  {
+    "key": "coach-xingyao",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 27, named 星瑶. long chestnut loose waves, mature graceful face, composed smile, black professional collared blouse. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-c75ca516-188f-4770-bef1-212dfb25cc33.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "星瑶",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-xingyao.png"
+  },
+  {
+    "key": "coach-zhixia",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 26, named 知夏. straight dark hair tied low, friendly almond eyes, fresh clear face, cream shirt and brown waistcoat. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-c2d0501b-ff09-499e-b21a-7a75a315f503.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "知夏",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-zhixia.png"
+  },
+  {
+    "key": "coach-wanqing",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 29, named 婉晴. neat black low bun, sophisticated calm expression, high cheekbones, dark green tailored waistcoat over ivory shirt. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-4f02d898-e7af-4df1-bf68-9b7b9adbc7d3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "婉晴",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-wanqing.png"
+  },
+  {
+    "key": "coach-ruoxi",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian female billiards coach, age 28, named 若汐. long dark waves over one shoulder, poised confident expression, black collared shirt and taupe tailored vest. Beautiful, naturally attractive, refined professional woman. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-1abc6ce7-2b29-48dc-ab90-f0e4417a1016.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "若汐",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-ruoxi.png"
+  },
+  {
+    "key": "coach-jingchuan",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian male billiards coach, age 28, named 景川. short neat black textured hair, clean-shaven angular face, dignified warm expression, white shirt and dark green waistcoat. Handsome, dignified, refined professional man. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-eb3a8241-50af-49e0-bc0d-a4f03a2c74d9.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "景川",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-jingchuan.png"
+  },
+  {
+    "key": "coach-yuheng",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian male billiards coach, age 29, named 宇衡. short black side-parted hair, athletic shoulders, square clean-shaven jaw, composed friendly expression, charcoal waistcoat and ivory shirt. Handsome, dignified, refined professional man. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-ee29fc33-5344-43fe-9beb-b14e38564452.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "宇衡",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-yuheng.png"
+  },
+  {
+    "key": "coach-chenyuan",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian male billiards coach, age 31, named 承远. short black slightly waved hair, mature handsome clean-shaven face, assured expression, black professional collared shirt. Handsome, dignified, refined professional man. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-8efe07ff-d741-48f2-b958-79900bbb6f41.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "承远",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-chenyuan.png"
+  },
+  {
+    "key": "coach-junting",
+    "prompt": "Use case: photorealistic-natural. Individual portrait for an elegant billiards club app. A new fictional adult East Asian male billiards coach, age 33, named 峻霆. slick neat black haircut, distinguished masculine features, clean shaven, confident calm expression, forest green waistcoat and crisp white shirt. Handsome, dignified, refined professional man. Waist-up editorial portrait, centered, holding one billiards cue lightly at side, full head and breathing room. Softly blurred vintage billiards lounge with forest green felt and warm brass lights. Premium realistic photography, natural skin texture, tailored modest professional attire, relaxed posture, anatomically correct hands. Portrait 4:5 framing. No text, no logo, no watermark. Do not resemble a celebrity. Each person must have a distinctive face.",
+    "hint": "Generated images are saved to C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515 as C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-ea59decc-fee5-45ac-a143-9c7bbdd4deb7.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "catalogName": "峻霆",
+    "catalogBrand": "台球助教",
+    "tool": "built-in image_gen",
+    "assetPath": "/assets/services/coach-junting.png"
+  }
+]

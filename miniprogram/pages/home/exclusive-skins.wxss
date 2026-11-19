@@ -1,0 +1,212 @@
+.preview-tech {
+  background: linear-gradient(145deg, #12212c, #1c2d3a);
+  --preview-ink: #91c8cd;
+  --preview-surface: #1c2d3a;
+  border-color: #3a505e;
+}
+.preview-retro {
+  background: linear-gradient(145deg, #eee4d1, #faf3e5);
+  --preview-ink: #845c36;
+  --preview-surface: #faf3e5;
+  border-color: #c7b28c;
+}
+.preview-minimal {
+  background: linear-gradient(145deg, #f3f5f6, #ffffff);
+  --preview-ink: #273e49;
+  --preview-surface: #ffffff;
+  border-color: #e1e7e9;
+}
+.preview-neon {
+  background: linear-gradient(145deg, #211e2b, #2d2938);
+  --preview-ink: #b6a2d3;
+  --preview-surface: #2d2938;
+  border-color: #51485f;
+}
+.preview-ice {
+  background: linear-gradient(145deg, #edf5fb, #fafdff);
+  --preview-ink: #34789b;
+  --preview-surface: #fafdff;
+  border-color: #c7dce9;
+}
+.preview-forest {
+  background: linear-gradient(145deg, #edf1e8, #fafbf6);
+  --preview-ink: #476b4d;
+  --preview-surface: #fafbf6;
+  border-color: #cdd8c4;
+}
+.preview-ink {
+  background: linear-gradient(145deg, #eeeae0, #f9f6ed);
+  --preview-ink: #954b37;
+  --preview-surface: #f9f6ed;
+  border-color: #ccc7b9;
+}
+.preview-obsidian {
+  background: linear-gradient(145deg, #101216, #1c1e23);
+  --preview-ink: #d5bd8a;
+  --preview-surface: #1c1e23;
+  border-color: #454036;
+}
+.preview-film {
+  background: linear-gradient(145deg, #f2dfd0, #fff4e8);
+  --preview-ink: #ad5d39;
+  --preview-surface: #fff4e8;
+  border-color: #d8af8f;
+}
+.preview-ball {
+  box-shadow: 0 4rpx 10rpx #0001;
+}
+.preview-tech {
+  background-image: linear-gradient(135deg, #061b2d, #123348);
+  border-radius: 8rpx;
+}
+.preview-retro .preview-surface {
+  border-radius: 0;
+  border-style: double;
+}
+.preview-neon .preview-surface {
+  box-shadow: 0 0 18rpx #b56bea50;
+}
+.preview-ink .preview-surface {
+  border-radius: 0;
+  border-top-width: 4rpx;
+}
+.preview-film .preview-surface {
+  border-radius: 22rpx;
+}
+
+.exclusive-tech .hero-title,
+.exclusive-tech .table-number {
+  letter-spacing: 1rpx;
+}
+.exclusive-retro,
+.exclusive-ink {
+  font-family: 'Songti SC', 'STSong', 'SimSun', serif;
+}
+.skin-category-tabs {
+  display: flex;
+  gap: 8rpx;
+  padding: 7rpx;
+  border-radius: 22rpx;
+  margin: 24rpx 0;
+}
+.app-themed .skin-category-tabs button {
+  flex: 1;
+  margin: 0;
+  padding: 17rpx 10rpx;
+  font-size: 25rpx;
+  border-radius: 16rpx;
+}
+.exclusive-heading {
+  margin: 24rpx 0;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+.exclusive-heading > text {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 23rpx;
+}
+.app-themed button.exclusive-default {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 22rpx;
+  margin: 0 0 20rpx;
+  border-radius: 19rpx;
+  font-size: 25rpx;
+  box-shadow: none;
+}
+.exclusive-default > text {
+  font-size: 21rpx;
+}
+.exclusive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
+}
+.app-themed button.exclusive-option {
+  min-width: 0;
+  text-align: left;
+  margin: 0;
+  padding: 12rpx;
+  border-radius: 22rpx;
+  line-height: 1.5;
+  box-shadow: none;
+  transition:
+    transform 0.2s,
+    border-color 0.2s;
+}
+.exclusive-preview {
+  position: relative;
+  overflow: hidden;
+  height: 150rpx;
+  border-radius: 14rpx;
+  border: 1rpx solid;
+  pointer-events: none;
+}
+.preview-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 30rpx;
+  background: var(--preview-ink);
+  opacity: 0.8;
+}
+.preview-surface {
+  position: absolute;
+  left: 46rpx;
+  right: 18rpx;
+  top: 24rpx;
+  height: 90rpx;
+  background: var(--preview-surface);
+  border: 1rpx solid var(--preview-ink);
+  border-radius: 8rpx;
+  opacity: 0.9;
+  padding: 14rpx;
+}
+.preview-surface > view {
+  height: 5rpx;
+  width: 80%;
+  background: var(--preview-ink);
+  opacity: 0.35;
+  margin-bottom: 10rpx;
+  border-radius: 3rpx;
+}
+.preview-surface > view:nth-child(2) {
+  width: 55%;
+}
+.preview-surface > view:nth-child(3) {
+  width: 68%;
+}
+.preview-ball {
+  position: absolute;
+  bottom: 17rpx;
+  right: 20rpx;
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  background: var(--preview-ink);
+}
+.exclusive-option-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 26rpx;
+  font-weight: 600;
+  margin: 16rpx 4rpx 8rpx;
+}
+.exclusive-description {
+  font-size: 22rpx;
+  line-height: 1.6;
+  margin: 0 4rpx;
+  min-height: 65rpx;
+}
+.exclusive-unlock {
+  font-size: 21rpx;
+  margin: 8rpx 4rpx 4rpx;
+}
+.app-themed button.exclusive-option.is-locked .exclusive-preview {
+  opacity: 0.6;
+}

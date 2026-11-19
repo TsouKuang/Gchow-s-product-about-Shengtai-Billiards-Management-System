@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: billiard_db
+      MYSQL_USER: shengtai_app
+      MYSQL_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD}
+    volumes: [mysql_data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql -u shengtai_app -e 'SELECT 1' billiard_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    restart: unless-stopped
+  backend:
+    build: {context: .., dockerfile: deploy/Dockerfile}
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:mysql://mysql:3306/billiard_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+      DB_USER: shengtai_app
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD}
+      DEMO_ENABLED: 'false'
+      WECHAT_APPID: ${WECHAT_APPID:?set WECHAT_APPID}
+      WECHAT_SECRET: ${WECHAT_SECRET:?set WECHAT_SECRET}
+    depends_on: {mysql: {condition: service_healthy}}
+    restart: unless-stopped
+  https:
+    image: caddy:2
+    ports: ['80:80','443:443']
+    environment: {DOMAIN: '${DOMAIN:?set DOMAIN}'}
+    volumes: ['./Caddyfile:/etc/caddy/Caddyfile:ro','caddy_data:/data']
+    depends_on: [backend]
+    restart: unless-stopped
+volumes: {mysql_data: {}, caddy_data: {}}

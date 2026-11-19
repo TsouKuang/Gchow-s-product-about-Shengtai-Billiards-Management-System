@@ -1,0 +1,1 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><groupId>com.shengtai</groupId><artifactId>shengtai-system</artifactId><version>0.5.0</version><packaging>pom</packaging><modules><module>backend</module></modules></project>

@@ -1,0 +1,8 @@
+[Unit]
+Description=Shengtai database backup
+After=mysql.service
+Requires=mysql.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/shengtai-backup

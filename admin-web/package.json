@@ -1,0 +1,24 @@
+{
+  "name": "billiard-frontdesk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "check": "node ../scripts/check-source.cjs",
+    "format": "node ../scripts/format-source.cjs --write",
+    "format:check": "node ../scripts/format-source.cjs",
+    "test:ui": "node --test ../tests/miniprogram-appearance.test.cjs",
+    "check:mini": "node ../scripts/check-miniprogram.cjs"
+  },
+  "dependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@babel/parser": "7.29.12",
+    "prettier": "3.10.1",
+    "vite": "^7.0.0"
+  }
+}

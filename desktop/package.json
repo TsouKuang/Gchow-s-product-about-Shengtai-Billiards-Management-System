@@ -1,0 +1,52 @@
+{
+  "name": "qingning-billiard",
+  "version": "0.13.0",
+  "description": "Yongzhou Shengtai Billiards Club",
+  "author": "永州圣泰台球俱乐部",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "prestart": "npm run sync-web",
+    "pack": "electron-builder --win dir",
+    "dist": "electron-builder --win nsis",
+    "sync-web": "npm --prefix ../admin-web run build && node scripts/sync-web.cjs",
+    "prepack": "npm run sync-web",
+    "predist": "npm run sync-web"
+  },
+  "devDependencies": {
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "com.qingning.billiard",
+    "productName": "永州圣泰台球俱乐部",
+    "directories": {
+      "output": "release-sync-filters"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "settings.html",
+      "web/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend/target/billiard-server-0.1.0.jar",
+        "to": "backend/server.jar"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "永州圣泰台球俱乐部",
+      "artifactName": "Shengtai-Billiard-Setup-${version}.exe"
+    },
+    "electronDist": "node_modules/electron/dist"
+  }
+}

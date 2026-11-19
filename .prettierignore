@@ -1,0 +1,11 @@
+**/node_modules/
+**/dist/
+desktop/web/
+desktop/release*/
+.local/
+backend/
+miniprogram/project.private.config.json
+
+# These templates use the text-preserving project formatter.
+miniprogram/**/*.wxml
+admin-web/src/App.html

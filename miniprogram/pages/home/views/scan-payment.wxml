@@ -1,0 +1,67 @@
+<view
+  wx:if="{{scanStage}}"
+  style="{{themeStyle}}"
+  class="app-themed wallet-overlay theme-{{skinKey}}"
+>
+  <view class="wallet-backdrop"></view>
+  <view class="wallet-checkout-sheet scan-sheet scan-expanded">
+    <view class="wallet-sheet-heading">
+      <text>{{scanStage==='processing'?'支付中':scanStage==='pin'?(checkoutMethod==='WALLET'?'钱包支付确认':'扫码支付确认'):'扫码支付'}}</text>
+      <button wx:if="{{!busy}}" bindtap="closeCheckout" aria-label="关闭">×</button>
+      <view wx:else class="scan-close-space"></view>
+    </view>
+    <view
+      wx:if="{{scanStage==='code' || scanStage==='focus'}}"
+      class="scan-stage-body scan-code-body"
+    >
+      <view class="scan-merchant">
+        <view class="scan-merchant-seal">ST</view>
+        <view>永州圣泰台球俱乐部</view>
+        <text>{{checkout.title}}</text>
+      </view>
+      <view class="scan-code-frame {{scanStage==='focus'?'is-recognized':''}}">
+        <image src="/assets/store-qr.png" show-menu-by-longpress="{{true}}" mode="aspectFit" />
+        <view class="qr-focus-corner corner-tl"></view>
+        <view class="qr-focus-corner corner-tr"></view>
+        <view class="qr-focus-corner corner-bl"></view>
+        <view class="qr-focus-corner corner-br"></view>
+      </view>
+      <view class="scan-recognition-state">
+        <view class="scan-status-dot"></view>
+        <text>{{scanStage==='focus'?'识别完成':'正在识别收款码'}}</text>
+      </view>
+    </view>
+    <view wx:elif="{{scanStage==='pin'}}" class="scan-stage-body scan-pin-body">
+      <view class="scan-payment-summary">
+        <view class="wallet-checkout-title">{{checkout.title}}</view>
+        <view class="wallet-checkout-amount">¥{{checkout.amount}}</view>
+      </view>
+      <view class="wallet-pin-dots">
+        <view wx:for="{{pinDots}}" wx:key="*this" class="{{pinLength>item?'pin-slot-filled':''}}">
+          <view wx:if="{{pinLength>item}}" class="wallet-pin-dot"></view>
+        </view>
+      </view>
+      <view class="wallet-pin-message {{walletError?'is-error':''}}" role="status">{{busy?'正在验证支付密码…':walletError||'请输入六位支付密码'}}</view>
+      <view class="wallet-keypad">
+        <button
+          wx:for="{{pinKeys}}"
+          wx:key="*this"
+          data-key="{{item}}"
+          bindtap="pressPinKey"
+          disabled="{{busy || !item}}"
+          class="{{item==='delete'?'delete-key':''}}"
+        >{{item==='delete'?'⌫':item}}</button>
+      </view>
+    </view>
+    <view wx:else class="scan-stage-body scan-processing-body">
+      <view class="scan-payment-summary">
+        <view class="wallet-checkout-title">{{checkout.title}}</view>
+        <view class="wallet-checkout-amount">¥{{checkout.amount}}</view>
+      </view>
+      <view class="scan-processing-center">
+        <view class="payment-spinner"></view>
+        <text>正在确认支付结果</text>
+      </view>
+    </view>
+  </view>
+</view>

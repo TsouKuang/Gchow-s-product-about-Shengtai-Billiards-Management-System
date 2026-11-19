@@ -1,0 +1,1488 @@
+<div v-if="!token" class="desk-login">
+  <div class="login-halo" aria-hidden="true"></div>
+  <form class="desk-login-card" @submit.prevent="login">
+    <div class="desk-login-icon" aria-hidden="true">8</div>
+    <div class="desk-login-brand">SHENGTAI BILLIARDS</div>
+    <h1>登录工作台</h1>
+    <p>永州圣泰台球俱乐部 · 品牌运营</p>
+    <label>账号<input v-model="username" autocomplete="username" required></label>
+    <label>密码<input v-model="password" type="password" autocomplete="current-password" required></label>
+    <p class="error" v-if="error" role="alert">{{error}}</p>
+    <p v-else-if="loginMessage" role="status">{{loginMessage}}</p>
+    <button :disabled="busy">{{busy?'正在登录…':'进入工作台 →'}}</button>
+  </form>
+</div>
+<div v-else class="layout">
+  <aside>
+    <div class="brand">
+      <span class="brand-emblem">ST<span>✦</span></span>
+      <div>
+        <strong>圣泰台球</strong>
+        <span class="brand-full-name">永州圣泰台球俱乐部</span>
+      </div>
+    </div>
+    <small>门店运营工作台</small>
+    <nav>
+      <button
+        v-for="name in ['球桌工作台','消费订单','套餐管理','服务管理','会员管理','经营统计']"
+        :class="{active:tab===name}"
+        @click="enterTab(name)"
+      >{{name}}<i v-if="name==='消费订单'&&pendingCueOrders.length" class="nav-alert-dot">{{pendingCueOrders.length}}</i></button>
+    </nav>
+    <div class="aside-bottom brand-sidebar">
+      <div class="desk-account-card">
+        <button
+          class="desk-identity"
+          :class="{active:tab==='用户设置'}"
+          @click="enterTab('用户设置')"
+          aria-label="管理当前登录账号"
+        >
+          <span class="desk-avatar" aria-hidden="true"></span>
+          <span class="desk-account-copy">
+            <strong>{{signedInName || '用户设置'}}</strong>
+            <small>用户设置 <span>↗</span></small>
+          </span>
+        </button>
+        <button class="signout-button" @click="logoutPrompt=true" aria-label="退出登录" title="退出登录">
+          <svg
+            aria-hidden="true"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M10 4H5v16h5M9 12h11m-4-4 4 4-4 4" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+  <main>
+    <header>
+      <div>
+        <small>SHENGTAI / FRONT DESK</small>
+        <h1>{{tab}}</h1>
+      </div>
+      <div class="workspace-tools">
+        <button class="secondary" :disabled="busy" @click="refreshWorkspace">刷新数据 ↻</button>
+      </div>
+    </header>
+    <div class="error" role="alert" v-if="error">{{error}}</div>
+    <section class="metrics" v-if="tab==='球桌工作台'">
+      <div>
+        <small>全部球桌</small>
+        <strong>{{tables.length}}<em> 张</em></strong>
+      </div>
+      <div>
+        <small>正在使用</small>
+        <strong>{{tables.filter(t=>t.status==='IN_USE').length}}<em> 张</em></strong>
+      </div>
+      <div>
+        <small>空闲可用</small>
+        <strong>{{tables.filter(t=>t.status==='IDLE').length}}<em> 张</em></strong>
+      </div>
+      <div>
+        <small>今日收入</small>
+        <strong>{{todayIncome===null?'—':'¥ '+money(todayIncome.income)}}</strong>
+      </div>
+    </section>
+    <template v-if="tab==='球桌工作台'">
+      <div class="section-title">
+        <h2>球桌实时状态</h2>
+      </div>
+      <div class="catalog-toolbar table-toolbar">
+        <input v-model="tableQuery" placeholder="搜索桌号，例如 T03" />
+        <desk-select v-model="tableState">
+          <option value="">全部状态</option>
+          <option v-for="key in ['IDLE','IN_USE','MAINTENANCE']" :value="key">{{labels[key]}}</option>
+        </desk-select>
+        <desk-select v-model="tableType">
+          <option value="">全部球种</option>
+          <option>中式八球</option>
+          <option>美式九球</option>
+          <option>斯诺克</option>
+        </desk-select>
+      </div>
+      <section class="table-grid">
+        <article v-for="t in visibleTables" :key="t.id" class="table-card">
+          <div class="card-top">
+            <span class="table-no">{{t.table_no}}</span>
+            <span :class="['badge',t.status]">{{labels[t.status]}}</span>
+          </div>
+          <p class="type">{{t.type}} · {{t.brand}} {{t.model_name}}</p>
+          <div class="catalog-image">
+            <img v-if="t.image_path" :src="t.image_path" :alt="t.brand+' '+t.model_name" />
+            <div v-else class="model-placeholder">{{t.brand}}<small>{{t.model_name}} · 实拍待补</small></div>
+          </div>
+          <div class="table-info">
+            <strong>{{t.package_name||'准备好迎接下一场精彩'}}</strong>
+            <small>{{remaining(t)||'进入小程序选桌，或在前台开台'}}</small>
+          </div>
+          <div class="actions">
+            <button v-if="t.status==='IDLE'" @click="choose(t)">收款开台</button>
+            <button v-if="t.status==='IN_USE'" :disabled="busy" @click="finish(t.active_order_id)">结束本局</button>
+            <button
+              v-if="t.status==='IN_USE'"
+              class="secondary"
+              :disabled="busy"
+              @click="showBill(t.active_order_id)"
+            >本局账单</button>
+            <button v-if="t.status==='MAINTENANCE'" :disabled="busy" @click="state(t,'IDLE')">恢复可用</button>
+          </div>
+          <button
+            class="text-button"
+            v-if="t.status==='IDLE'"
+            :disabled="busy"
+            @click="state(t,'MAINTENANCE')"
+          >设为维护</button>
+        </article>
+      </section>
+    </template>
+    <section class="panel orders-workspace" v-if="tab==='消费订单'">
+      <div class="orders-head">
+        <div>
+          <small class="section-kicker">消费与结算</small>
+          <h2>本局账单</h2>
+          <p>球桌消费与附加服务，在这里完成核对。</p>
+        </div>
+        <div class="orders-total">
+          <small>所选期间已付</small>
+          <strong>¥{{money(Number(datedOrders?.totals.cash||0)+Number(datedOrders?.totals.mock||0)+Number(datedOrders?.totals.wallet||0))}}</strong>
+        </div>
+      </div>
+      <form class="date-toolbar orders-filter" @submit.prevent="searchOrders(1,true)">
+        <div class="date-presets">
+          <button
+            v-for="[days,label] in [[1,'今天'],[7,'近七天'],[0,'本月']]"
+            :key="days"
+            class="date-segment"
+            type="button"
+            :aria-pressed="orderPreset===days"
+            @click="orderShortcut(days)"
+          >{{label}}</button>
+        </div>
+        <label>开始日期<input v-model="orderDates.from" @input="orderPreset=null" type="date" required></label>
+        <span class="date-dash">—</span>
+        <label>结束日期<input v-model="orderDates.to" @input="orderPreset=null" type="date" required></label>
+        <button :disabled="busy">查询订单</button>
+      </form>
+      <div class="orders-status-bar">
+        <label class="pending-order-switch">
+          <input type="checkbox" v-model="pendingOrdersOnly" @change="searchOrders(1)" />
+          <span class="switch-track"></span>
+          <span>仅看待处理</span>
+        </label>
+        <span class="orders-count">{{datedOrders?.totals.order_count||0}} 笔订单</span>
+        <button
+          v-if="pendingCueOrders.length"
+          class="cue-inbox"
+          @click="showBill(pendingCueOrders[0].id)"
+        ><span class="cue-inbox-dot"></span>球杆归还待办 <b>{{pendingCueOrders.length}}</b><span>查看 ›</span></button>
+      </div>
+      <div class="session-order-list">
+        <article
+          v-for="o in datedOrders?.rows||[]"
+          :key="o.id"
+          class="session-order"
+          :class="{waiting:Number(o.pending_cues)>0}"
+        >
+          <div class="session-table-mark">
+            <strong>{{o.table_no}}</strong>
+            <small>{{o.source==='FRONT_DESK'?'前台开台':'顾客开台'}}</small>
+          </div>
+          <div class="session-order-main">
+            <div class="session-order-heading">
+              <h3>{{o.package_name}}</h3>
+              <span :class="['settlement-state',o.settlement_status]">{{settlementLabels[o.settlement_status]||labels[o.status]}}</span>
+            </div>
+            <div class="session-order-meta">
+              <span>{{date(o.started_at)}}</span>
+              <span class="mono">#{{o.order_no.slice(-10).toUpperCase()}}</span>
+              <span v-if="o.account_name">{{o.account_name}}</span>
+            </div>
+            <button v-if="o.pending_cues" class="cue-return-chip" @click="showBill(o.id)"><span>↗</span>{{o.pending_cues}} 根球杆待验收归还</button>
+            <small v-else class="session-order-note">{{o.status==='ACTIVE'?'套餐到时自动结束，费用归入本局账单':'球局已结束，可查看完整消费明细'}}</small>
+          </div>
+          <div class="session-order-price">
+            <small>本局已付</small>
+            <strong>¥{{money(o.paid_total)}}</strong>
+            <span>台费 {{money(o.amount)}} · 服务 {{money(Number(o.paid_total)-Number(o.amount))}}</span>
+          </div>
+          <div class="session-order-actions">
+            <button class="secondary" :disabled="busy" @click="showBill(o.id)">查看账单</button>
+            <button v-if="o.status==='ACTIVE'" :disabled="busy" @click="finish(o.id)">结束本局</button>
+            <button
+              v-else-if="o.settlement_status==='PAYMENT_PENDING'"
+              :disabled="busy"
+              @click="showBill(o.id)"
+            >办理结算</button>
+            <button v-else-if="o.pending_cues" :disabled="busy" @click="showBill(o.id)">办理归还</button>
+          </div>
+        </article>
+        <div v-if="datedOrders&&!datedOrders.rows.length" class="orders-empty">
+          <span>✓</span>
+          <h3>{{pendingOrdersOnly?'当前没有待处理订单':'这个期间还没有消费记录'}}</h3>
+          <p>可切换日期查看其他账单</p>
+        </div>
+      </div>
+      <div v-if="datedOrders" class="usage-pager">
+        <button
+          class="secondary"
+          :disabled="busy||datedOrders.page<=1"
+          @click="searchOrders(datedOrders.page-1)"
+        >上一页</button>
+        <span>{{datedOrders.page}} / {{datedOrders.pages}}</span>
+        <button
+          class="secondary"
+          :disabled="busy||datedOrders.page>=datedOrders.pages"
+          @click="searchOrders(datedOrders.page+1)"
+        >下一页</button>
+      </div>
+    </section>
+    <section class="panel packages-v2" v-if="tab==='套餐管理'">
+      <div class="package-catalog-head">
+        <div>
+          <small class="section-kicker">PLAY COLLECTION</small>
+          <h2>套餐目录</h2>
+          <p>按球桌品牌统一设置套餐价格，同品牌的球桌同步生效。</p>
+        </div>
+        <label class="pricing-object">选择对象<desk-select v-model="pricingTarget" aria-label="套餐定价对象"><option value="DEFAULT">门店默认价格</option><option v-for="b in brands" :value="'BRAND:'+b.id">{{b.name}}</option></desk-select></label>
+      </div>
+      <div class="packages package-catalog">
+        <article v-for="p in scopedPackages" :key="p.id" :class="{'package-disabled':!p.enabled}">
+          <div class="package-card-top">
+            <span>{{p.minutes}} MIN</span>
+            <span class="catalog-availability">{{p.enabled?'销售中':'已下架'}}</span>
+          </div>
+          <h3>{{p.name}}</h3>
+          <small>{{p.scopeLabel}}</small>
+          <strong>¥{{money(p.displayPrice)}}</strong>
+          <div class="package-card-actions">
+            <button
+              class="secondary"
+              :disabled="busy"
+              @click="p.enabled?disable(p.id):enablePackage(p.id)"
+            >{{p.enabled?'下架':'上架'}}</button>
+            <button :disabled="busy" @click="beginPackageEdit(p)">修改</button>
+          </div>
+        </article>
+        <p v-if="!scopedPackages.length">暂无套餐。</p>
+      </div>
+      <section class="new-package-section">
+        <div class="member-section-head">
+          <div>
+            <small class="section-kicker">NEW EXPERIENCE</small>
+            <h2>新增套餐</h2>
+          </div>
+        </div>
+        <div class="package-presets">
+          <button class="secondary" v-for="p in packPresets" @click="newPack={...p}">{{p.name}} · {{p.minutes}}分钟</button>
+        </div>
+        <form class="inline-form" @submit.prevent="addPackage">
+          <label>套餐名称<input v-model="newPack.name" maxlength="80" required placeholder="例如 午后畅打"></label>
+          <label>时长（分钟）<input v-model.number="newPack.minutes" type="number" min="1" max="1440" required></label>
+          <label>默认价格（元）<input v-model.number="newPack.price" type="number" min="0.01" max="99999" step="0.01" required></label>
+          <button :disabled="busy">新增套餐</button>
+        </form>
+      </section>
+      <Teleport to="body">
+        <div class="layout desk-portal">
+          <div class="modal" v-if="packageEdit" @click.self="packageEdit=null">
+            <form class="dialog package-editor-v2" @submit.prevent="savePackageEdit(false)">
+              <div class="editor-heading">
+                <div>
+                  <small class="section-kicker">PACKAGE SETTINGS</small>
+                  <h2>修改套餐</h2>
+                </div>
+                <button
+                  type="button"
+                  class="icon-close secondary"
+                  aria-label="关闭套餐编辑"
+                  @click="packageEdit=null"
+                >×</button>
+              </div>
+              <p class="error" v-if="error">{{error}}</p>
+              <label>套餐名称<input v-model="packageEdit.name" :readonly="packageEdit.target!=='DEFAULT'" maxlength="80" required></label>
+              <div class="service-fields">
+                <label>时长（分钟）<input v-model.number="packageEdit.minutes" :readonly="packageEdit.target!=='DEFAULT'" type="number" min="1" max="1440" required></label>
+                <label>{{packageEdit.target==='DEFAULT'?'默认价格':'所选对象价格'}}（元）<input v-model.number="packageEdit.price" type="number" min="0.01" max="99999" step="0.01" required></label>
+              </div>
+              <p>{{packageEdit.target==='DEFAULT'?'名称、时长及默认价用于之后的新订单。':'当前仅修改所选球桌或型号的专属价格，历史订单保留原价。'}}</p>
+              <div class="editor-footer">
+                <button
+                  v-if="packageEdit.target!=='DEFAULT'&&packageEdit.hasOverride"
+                  type="button"
+                  class="secondary"
+                  :disabled="busy"
+                  @click="savePackageEdit(true)"
+                >使用继承价格</button>
+                <button :disabled="busy">保存修改</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </Teleport>
+    </section>
+    <section class="panel service-manager-v2" v-if="tab==='服务管理'">
+      <div class="service-manager-toolbar">
+        <div class="management-tabs">
+          <button :class="{active:catalogKind==='CUE'}" @click="catalogKind='CUE';catalogFilter=''">球杆管理</button>
+          <button
+            :class="{active:catalogKind==='COACH'}"
+            @click="catalogKind='COACH';catalogFilter=''"
+          >助教管理</button>
+        </div>
+        <input v-model="catalogSearch" placeholder="搜索编号、品牌或名称" aria-label="搜索管理服务" />
+        <button v-if="catalogKind==='COACH'" class="secondary" @click="gradeEditor=true">等级定价</button>
+        <button @click="beginCreateService">＋ 新增{{catalogKind==='COACH'?'助教':'球杆'}}</button>
+      </div>
+      <p v-if="saved" class="bill-notice" role="status">{{saved}}</p>
+      <div class="catalog-filter-pills">
+        <button class="secondary" :class="{active:!catalogFilter}" @click="catalogFilter=''">全部{{catalogKind==='CUE'?'品牌':'等级'}}</button>
+        <button
+          class="secondary"
+          v-for="name in catalogFilters"
+          :class="{active:catalogFilter===name}"
+          @click="catalogFilter=name"
+        >{{name}}</button>
+      </div>
+      <div class="service-admin-grid">
+        <article v-for="i in catalogRows" :key="i.id" class="service-admin-tile">
+          <div class="service-tile-content">
+            <img :src="i.image_path" :alt="i.name" :class="{portrait:i.kind==='COACH'}" />
+            <div>
+              <span class="service-sku">{{serviceCode(i)}}</span>
+              <h3>{{i.name}}</h3>
+              <small>{{i.brand}}<template v-if="i.kind==='COACH'"> · {{i.grade_title}}</template></small>
+              <strong>¥{{money(frontHourly(i))}}<em> / 小时</em></strong>
+            </div>
+          </div>
+          <div class="service-tile-footer">
+            <span :class="{offline:!i.enabled}">{{i.enabled?'已上架':'已下架'}} · 空闲 {{i.available}} / {{i.stock}}</span>
+            <div>
+              <button class="text-button" @click="beginEdit(i)" :aria-label="'编辑 '+i.name">编辑</button>
+              <button
+                class="text-button remove-service"
+                :disabled="busy"
+                @click="deleteService(i)"
+                :aria-label="'删除 '+i.name"
+              >删除</button>
+            </div>
+          </div>
+        </article>
+        <div v-if="!catalogRows.length" class="catalog-empty">
+          <strong>还没有{{catalogKind==='COACH'?'助教':'球杆'}}条目</strong>
+          <p>添加资料后即可设置价格与上架。</p>
+          <button @click="beginCreateService">新增条目</button>
+        </div>
+      </div>
+      <Teleport to="body">
+        <div class="layout desk-portal">
+          <div class="modal profile-editor-modal" v-if="editDraft" @click.self="editDraft=null">
+            <form class="dialog service-editor-v2" @submit.prevent="editService(editDraft)">
+              <div class="editor-heading">
+                <div>
+                  <small class="section-kicker">SERVICE ATELIER</small>
+                  <h2>{{editDraft.id?'编辑':'新增'}}{{editDraft.kind==='COACH'?'助教':'球杆'}} <span class="service-sku" v-if="editDraft.service_code">{{editDraft.service_code}}</span></h2>
+                </div>
+                <button
+                  type="button"
+                  class="icon-close secondary"
+                  aria-label="关闭服务编辑"
+                  @click="editDraft=null;editItemId=null"
+                >×</button>
+              </div>
+              <div class="service-editor-scroll">
+                <p v-if="error" class="error" role="alert">{{error}}</p>
+                <div class="service-editor-layout">
+                  <div class="service-editor-portrait">
+                    <img
+                      v-if="editDraft.image_path"
+                      :src="editDraft.image_path"
+                      :class="{portrait:editDraft.kind==='COACH'}"
+                      alt="服务预览"
+                    />
+                    <label class="image-upload-control">
+                      <span>{{uploadingImage?'正在上传…':'＋ 从电脑选择图片'}}</span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        :disabled="uploadingImage"
+                        @change="uploadServiceImage"
+                      />
+                    </label>
+                    <small class="upload-hint">PNG / JPG · 不超过 5 MB</small>
+                  </div>
+                  <div class="service-editor-fields">
+                    <div class="service-fields">
+                      <label>名称<input v-model="editDraft.name" maxlength="100" required></label>
+                      <label>品牌 / 团队<input v-model="editDraft.brand" maxlength="50" required></label>
+                    </div>
+                    <template v-if="editDraft.kind==='COACH'">
+                      <div class="service-fields">
+                        <label>性别<desk-select v-model="editDraft.gender"><option>女</option><option>男</option></desk-select></label>
+                        <label>等级<desk-select v-model.number="editDraft.star_level"><option v-for="g in grades" :value="g.stars">{{g.title}} · ¥{{g.rate}}/小时</option></desk-select></label>
+                      </div>
+                      <div class="service-fields">
+                        <label>年龄<input v-model.number="editDraft.age" type="number" min="18" max="75" required></label>
+                        <label>身高/cm<input v-model.number="editDraft.height_cm" type="number" min="130" max="230" required></label>
+                        <label>体重/kg<input v-model.number="editDraft.weight_kg" type="number" min="35" max="180" required></label>
+                      </div>
+                      <div class="service-fields">
+                        <label>性格<input v-model="editDraft.personality" maxlength="120" required></label>
+                        <label>擅长项目<input v-model="editDraft.specialties" maxlength="200" required></label>
+                      </div>
+                    </template>
+                    <label>{{editDraft.kind==='COACH'?'个人介绍':'球杆说明'}}<textarea v-model="editDraft.description" maxlength="500" rows="2" required></textarea></label>
+                    <div class="service-fields">
+                      <label v-if="editDraft.kind==='CUE'">租金（元／小时）<input v-model="editDraft.rate" type="number" min="0.01" max="99999" step="0.01" required></label>
+                      <label v-if="editDraft.kind===&#39;CUE&#39;">库存（根）<input v-model.number="editDraft.stock" type="number" min="0" :max="editDraft.kind==='COACH'?1:999" required></label>
+                    </div>
+                    <label v-if="editDraft.kind===&#39;CUE&#39;" class="check-label"><input v-model="editDraft.enabled" type="checkbox">上架，可供顾客选择</label>
+                  </div>
+                </div>
+              </div>
+              <footer class="editor-footer">
+                <span>{{editDraft.id?'保存后用于新的预约，历史订单价格保留。':'保存后自动分配固定服务编号。'}}</span>
+                <button :disabled="busy||uploadingImage">{{busy?'保存中…':'保存服务'}}</button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      </Teleport>
+      <Teleport to="body">
+        <div class="layout desk-portal">
+          <div class="modal" v-if="gradeEditor" @click.self="gradeEditor=false">
+            <section class="dialog grade-editor-v2">
+              <div class="editor-heading">
+                <h2>助教等级定价</h2>
+                <button class="secondary icon-close" @click="gradeEditor=false">×</button>
+              </div>
+              <p>所有助教统一使用所属等级的时价，保存后用于新订单。</p>
+              <div class="grade-admin-grid">
+                <form v-for="g in grades" @submit.prevent="saveGrade(g)">
+                  <strong>{{g.title}}</strong>
+                  <label>元 / 小时<input v-model.number="g.rate" type="number" min="0.01" max="99999" step="0.01" required></label>
+                  <button :disabled="busy">保存</button>
+                </form>
+              </div>
+            </section>
+          </div>
+        </div>
+      </Teleport>
+    </section>
+    <section class="panel member-panel" v-if="tab==='会员管理'">
+      <div class="member-section-head">
+        <div>
+          <h2>会员档案</h2>
+          <p>按累计消费记录计算等级，可查看每笔消费明细。</p>
+        </div>
+        <div class="workspace-tools">
+          <button :disabled="busy" @click="editTierRules">等级设置</button>
+        </div>
+      </div>
+      <div class="member-toolbar">
+        <input v-model="memberQuery" placeholder="搜索编号、账号、昵称或等级" />
+        <desk-select v-model="memberTier" aria-label="会员等级">
+          <option value="">全部等级</option>
+          <option v-for="tier in memberTiers" :key="tier">{{tier}}</option>
+        </desk-select>
+        <desk-select v-model="memberSort" aria-label="会员排序">
+          <option value="spend-desc">消费从高到低</option>
+          <option value="spend-asc">消费从低到高</option>
+          <option value="visits">开台次数从多到少</option>
+        </desk-select>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>会员</th>
+              <th>等级</th>
+              <th>开台</th>
+              <th>实收</th>
+              <th>扫码</th>
+              <th>钱包</th>
+              <th>累计消费</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="m in visibleMembers" :key="m.id">
+              <td>
+                <strong>{{m.nickname||m.username}}</strong>
+                <small>{{m.role==='FRONT_DESK'?'未关联顾客的前台消费':'ID：'+m.customer_code+' · '+m.username}}</small>
+              </td>
+              <td>
+                <span class="member-tier member-tier-badge"><img v-if="tierIcon(m.tier)" :src="'./assets/member-badges/'+tierIcon(m.tier)+'.png'" alt="">{{m.tier}}</span>
+              </td>
+              <td>{{m.visits}} 次</td>
+              <td>¥{{money(m.cash_spend)}}</td>
+              <td>¥{{money(m.mock_spend)}}</td>
+              <td>¥{{money(m.wallet_spend)}}</td>
+              <td>
+                <strong>¥{{money(m.total_spend)}}</strong>
+              </td>
+              <td>
+                <button class="secondary" :disabled="memberBusy" @click="openMember(m.id)">查看档案 ›</button>
+              </td>
+            </tr>
+            <tr v-if="!visibleMembers.length">
+              <td colspan="8">暂无匹配会员</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="panel stats-panel" v-if="tab==='经营统计'">
+      <section v-if="finance" class="finance-overview">
+        <div class="finance-heading">
+          <div>
+            <small>SHENGTAI FINANCE</small>
+            <h2>{{finance.month}} · 本月收支</h2>
+          </div>
+          <button class="finance-bill-button" @click="openStoreBill()">门店账单 ↗</button>
+        </div>
+        <div class="finance-cards">
+          <article>
+            <small>本月收入</small>
+            <strong>¥{{money(finance.income)}}</strong>
+            <small v-if="finance.includesMock">现金 ¥{{money(finance.cashIncome)}} · 扫码 ¥{{money(finance.mockIncome)}} · 钱包 ¥{{money(finance.walletIncome)}}</small>
+          </article>
+          <article>
+            <small>本月支出</small>
+            <strong>¥{{money(expenseTotal)}}</strong>
+          </article>
+          <article>
+            <small>本月结余</small>
+            <strong>¥{{money(finance.income-expenseTotal)}}</strong>
+          </article>
+        </div>
+      </section>
+      <h2>分期经营统计</h2>
+      <form class="date-toolbar" aria-label="经营统计筛选" @submit.prevent="loadStats">
+        <div class="date-segments" role="group" aria-label="快捷统计周期">
+          <button
+            v-for="[period,label] in [['day','本日'],['week','本周'],['month','本月'],['year','本年']]"
+            :key="period"
+            class="date-segment"
+            type="button"
+            :disabled="busy"
+            :aria-pressed="statsPeriod===period"
+            @click="setPeriod(period)"
+          >{{label}}</button>
+        </div>
+        <label>开始日期<input type="date" v-model="statsFrom" @change="statsPeriod='custom'" required></label>
+        <label>结束日期<input type="date" v-model="statsTo" @change="statsPeriod='custom'" required></label>
+        <button class="date-submit" :disabled="busy">查询统计</button>
+      </form>
+      <p>按收款登记日期统计完整数据库，不受最近100单列表限制。球桌按开台日期，服务按结算日期；现金及扫码收款按登记方式归集。服务队列显示当前全店状态，不受日期范围限制。</p>
+      <template v-if="stats">
+        <div :key="statsRefresh" class="finance-rings date-result">
+          <article>
+            <h3>所选期间 · 收入构成</h3>
+            <div
+              class="ring-chart"
+              :style="{background:ring(revenueParts,['var(--desk-accent)','#b98a50','#7596a2'])}"
+            >
+              <div>
+                <small>收款合计</small>
+                <strong>¥{{money(revenueTotal)}}</strong>
+              </div>
+            </div>
+            <div class="ring-legend">
+              <span>● 球桌 ¥{{money(revenueParts[0])}}</span>
+              <span>● 助教 ¥{{money(revenueParts[1])}}</span>
+              <span>● 球杆 ¥{{money(revenueParts[2])}}</span>
+            </div>
+          </article>
+          <article v-if="finance">
+            <div class="ring-card-heading">
+              <h3>本月 · 支出构成</h3>
+              <button class="secondary" @click="expenseDialog=true">登记与查看 ↗</button>
+            </div>
+            <div
+              class="ring-chart"
+              :style="{background:ring(expenseParts.map(p=>p.amount),expenseParts.map((p,i)=>expenseColors[i%expenseColors.length]))}"
+            >
+              <div>
+                <small>已登记支出</small>
+                <strong>¥{{money(expenseTotal)}}</strong>
+              </div>
+            </div>
+            <div class="ring-legend">
+              <span
+                v-for="(p,i) in expenseParts"
+                :key="p.name"
+                :style="{color:expenseColors[i%expenseColors.length]}"
+              >● {{p.name}} ¥{{money(p.amount)}}</span>
+            </div>
+          </article>
+        </div>
+        <h2>分类收款</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>业务</th>
+              <th>现金登记</th>
+              <th>扫码支付</th>
+              <th>钱包支付</th>
+              <th>合计</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="k in ['PLAY','COACH','CUE']">
+              <td>{{k==='PLAY'?'球桌套餐':k==='COACH'?'台球助教':'球杆租赁'}}</td>
+              <td>¥{{money(kindTotal(k,'CASH'))}}</td>
+              <td>¥{{money(kindTotal(k,'MOCK'))}}</td>
+              <td>¥{{money(kindTotal(k,'WALLET'))}}</td>
+              <td>
+                <strong>¥{{money(kindTotal(k,'CASH')+kindTotal(k,'MOCK')+kindTotal(k,'WALLET'))}}</strong>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>总计</th>
+              <td>¥{{money(receiptTotal('CASH'))}}</td>
+              <td>¥{{money(receiptTotal('MOCK'))}}</td>
+              <td>¥{{money(receiptTotal('WALLET'))}}</td>
+              <td>
+                <strong>¥{{money(revenueTotal)}}</strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        <section class="usage-insights">
+          <div class="usage-headline">
+            <h2>使用统计</h2>
+            <div v-if="detailKind==='coach'&&finance">
+              <small>预计本月应发总额</small>
+              <strong>¥{{money(finance.payrollTotal)}}</strong>
+            </div>
+          </div>
+          <div class="usage-toolbar">
+            <div class="management-tabs">
+              <button
+                v-for="entry in [['coach','助教业绩与工资'],['cue','球杆使用排行'],['day','每日收款']]"
+                :class="{active:detailKind===entry[0]}"
+                @click="switchDetail(entry[0])"
+              >{{entry[1]}}</button>
+            </div>
+            <input
+              v-model="detailQuery"
+              @input="detailPage=1"
+              :placeholder="detailKind==='day'?'搜索日期':'搜索编号、名称或品牌'"
+            />
+            <button
+              class="secondary"
+              :class="{active:usedOnly}"
+              @click="usedOnly=!usedOnly;detailPage=1"
+            >{{usedOnly?'只看有记录 ✓':'只看有记录'}}</button>
+          </div>
+          <div class="usage-card-grid">
+            <article class="usage-card" v-for="(i,index) in detailCards" :key="i.id||i.day">
+              <div class="usage-card-head">
+                <div>
+                  <small>{{detailKind==='day'?'收款日':i.brand}}</small>
+                  <h3>{{i.name||i.day}}</h3>
+                </div>
+                <span v-if="detailKind!=='day'">{{serviceCode(i)}}</span>
+              </div>
+              <div v-if="detailKind!=='day'" class="usage-pair">
+                <div>
+                  <small>{{detailKind==='cue'?'已归还次数':'完成服务'}}</small>
+                  <strong>{{i.uses}}</strong>
+                </div>
+                <div>
+                  <small>计费分钟</small>
+                  <strong>{{i.minutes}}</strong>
+                </div>
+              </div>
+              <div class="usage-pair">
+                <div>
+                  <small>{{detailKind==='coach'?'现金业绩':'现金登记'}}</small>
+                  <strong>¥{{money(i.cash??i.CASH)}}</strong>
+                </div>
+                <div>
+                  <small>扫码支付</small>
+                  <strong>¥{{money(i.mock??i.MOCK)}}</strong>
+                </div>
+                <div>
+                  <small>钱包支付</small>
+                  <strong>¥{{money(i.wallet??i.WALLET)}}</strong>
+                </div>
+              </div>
+              <div v-if="detailKind==='cue'" class="usage-foot">库存 {{i.stock}} 根</div>
+              <div v-if="detailKind==='coach'&&finance" class="usage-foot live-payroll">
+                <small>预计本月应发</small>
+                <strong>¥{{money(monthlySalary(i))}}</strong>
+              </div>
+            </article>
+          </div>
+          <p v-if="!detailCards.length">暂无符合条件的记录</p>
+          <div class="usage-pager">
+            <button class="secondary" :disabled="detailPage<=1" @click="detailPage--">上一页</button>
+            <span>{{Math.min(detailPage,detailPages)}} / {{detailPages}}</span>
+            <button class="secondary" :disabled="detailPage>=detailPages" @click="detailPage++">下一页</button>
+          </div>
+        </section>
+        <p>旧版缺少结算时间或收款方式的服务记录不计入收款合计，避免把来源不明的历史记录当成现金。</p>
+      </template>
+    </section>
+    <section v-if="tab==='用户设置' && brand" class="panel brand-panel">
+      <div class="settings-profile-banner">
+        <div class="settings-monogram">{{signedInName.slice(0,1).toUpperCase()}}</div>
+        <div>
+          <small>YOUR WORKSPACE</small>
+          <h2>{{signedInName}}</h2>
+          <p>门店管理员 · ID：{{brand.account.customer_code}}</p>
+        </div>
+        <button class="secondary" @click="editCredentials">账号与登录安全 ↗</button>
+      </div>
+      <div class="settings-section-heading">
+        <div>
+          <small>APPEARANCE</small>
+          <h3>工作台外观</h3>
+          <p>选择你喜欢的配色，整个工作台同步切换。</p>
+        </div>
+      </div>
+      <div class="skin-palette-grid">
+        <button
+          v-for="(name,i) in pcSkins"
+          :class="['skin-palette',{selected:pcSkin===i}]"
+          @click="setPcSkin(i)"
+        >
+          <span :class="'skin-art skin-art-'+i"></span>
+          <strong>{{name}}</strong>
+          <i>{{pcSkin===i?'✓':''}}</i>
+        </button>
+      </div>
+      <div class="settings-section-heading">
+        <div>
+          <small>STORE PROFILE</small>
+          <h3>{{brand.store.name}}</h3>
+        </div>
+        <button class="secondary" @click="editStore(brand.store)">编辑门店资料 ↗</button>
+      </div>
+      <dl class="brand-details">
+        <div>
+          <dt>门店地址</dt>
+          <dd>{{brand.store.province}} · {{brand.store.city}} {{brand.store.address||'待填写'}}</dd>
+        </div>
+        <div>
+          <dt>负责人</dt>
+          <dd>{{brand.store.manager||'待填写'}}</dd>
+        </div>
+        <div>
+          <dt>联系电话</dt>
+          <dd>{{brand.store.phone||'待填写'}}</dd>
+        </div>
+      </dl>
+      <div v-if="brand.store.address" class="store-map">
+        <div class="store-map-caption">
+          <div>
+            <h3>门店地图</h3>
+            <p>{{brand.store.address}}</p>
+          </div>
+          <a :href="storeMapUrl(brand.store)" target="_blank" rel="noopener noreferrer">在高德地图查看 ↗</a>
+        </div>
+        <iframe
+          v-if="brand.store.address.includes('湖南科技学院')"
+          src="https://www.amap.com/ssr/embed/place?id=B02EA001V1&amp;lng=111.606605&amp;lat=26.205613&amp;zoom=17&amp;platform=pc"
+          title="门店所在校区 · 高德地图"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      </div>
+    </section>
+  </main>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div v-if="tierDraft" class="modal">
+        <form class="dialog tier-settings" @submit.prevent="saveTierRules" aria-label="会员等级设置">
+          <h2>会员等级设置</h2>
+          <p>消费门槛逐级递增。保存后按新规则重新计算会员等级。</p>
+          <div class="tier-settings-row" v-for="(rule,index) in tierDraft" :key="rule.name">
+            <img :src="'./assets/member-badges/'+rule.icon+'.png'" alt="" />
+            <strong>{{rule.name}}</strong>
+            <label>累计消费门槛（元）<input v-model.number="rule.minimum" type="number" min="0" max="10000000" step="1" :readonly="index===0" required></label>
+            <label>等级图标<desk-select v-model="rule.icon"><option v-for="[key,label] in tierIcons" :key="key" :value="key">{{label}}徽章</option></desk-select></label>
+          </div>
+          <p v-if="error" class="error" role="alert">{{error}}</p>
+          <div class="workspace-tools dialog-actions">
+            <button :disabled="busy">保存等级规则</button>
+            <button class="secondary" type="button" :disabled="busy" @click="tierDraft=null">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div v-if="logoutPrompt" class="modal">
+        <section class="dialog signout-dialog" role="dialog" aria-label="退出登录">
+          <div class="desk-login-icon" aria-hidden="true">↪</div>
+          <h2>退出工作台？</h2>
+          <p>下次进入需要重新登录。</p>
+          <div class="workspace-tools dialog-actions">
+            <button @click="logout">退出登录</button>
+            <button class="secondary" @click="logoutPrompt=false">继续工作</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div v-if="storeDraft" class="modal">
+        <form class="dialog store-dialog" @submit.prevent="saveStore">
+          <h2>{{storeDraft.id?'门店资料':'新增门店'}}</h2>
+          <label>门店名称<input v-model.trim="storeDraft.name" required maxlength="80"></label>
+          <div class="member-fields">
+            <label>省份<input v-model.trim="storeDraft.province" required maxlength="40"></label>
+            <label>城市<input v-model.trim="storeDraft.city" required maxlength="40"></label>
+          </div>
+          <label>详细地址<input v-model.trim="storeDraft.address" required maxlength="180"></label>
+          <div class="member-fields">
+            <label>负责人<input v-model.trim="storeDraft.manager" required maxlength="40"></label>
+            <label>联系电话<input type="tel" v-model.trim="storeDraft.phone" required maxlength="32"></label>
+          </div>
+          <p v-if="error" class="error">{{error}}</p>
+          <div class="workspace-tools dialog-actions">
+            <button :disabled="busy">保存资料</button>
+            <button type="button" class="secondary" :disabled="busy" @click="storeDraft=null">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div v-if="credentials" class="modal">
+        <form class="dialog store-dialog" @submit.prevent="saveCredentials">
+          <h2>账号与登录安全</h2>
+          <p>输入当前密码验证身份。保存后使用新资料登录。</p>
+          <label>登录名<input v-model.trim="credentials.username" autocomplete="username" minlength="4" maxlength="24" required></label>
+          <label>当前密码<input type="password" v-model="credentials.currentPassword" autocomplete="current-password" required></label>
+          <details class="password-fold">
+            <summary>同时修改密码</summary>
+            <label>新密码<input type="password" v-model="credentials.newPassword" autocomplete="new-password" minlength="8" maxlength="72" placeholder="至少 8 位"></label>
+          </details>
+          <p v-if="error" class="error">{{error}}</p>
+          <div class="workspace-tools dialog-actions">
+            <button :disabled="busy">保存修改</button>
+            <button type="button" class="secondary" :disabled="busy" @click="credentials=null">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div class="modal member-overlay-v2" v-if="memberDetail" @click.self="memberDetail=null">
+        <section class="dialog member-dialog member-dialog-v2" role="dialog" aria-label="会员档案">
+          <header class="member-profile-hero">
+            <div class="member-large-avatar">{{(memberDetail.account.nickname||memberDetail.account.username).slice(0,1).toUpperCase()}}</div>
+            <div class="member-hero-copy">
+              <small>PLAYER DOSSIER · ID：{{memberDetail.account.customer_code}}</small>
+              <h2>{{memberDetail.account.nickname||memberDetail.account.username}}</h2>
+              <span>{{selectedMember?.tier||'圣泰会员'}} · {{memberDetail.account.username}}<template v-if="memberDetail.account.age"> · {{memberDetail.account.age}}岁</template><template v-if="['男','女'].includes(memberDetail.account.gender)"> · {{memberDetail.account.gender}}</template></span>
+            </div>
+            <button
+              class="secondary icon-close"
+              :disabled="memberBusy"
+              @click="memberDetail=null;newMemberPassword=''"
+              aria-label="关闭会员档案"
+            >×</button>
+          </header>
+          <div class="member-dossier-body">
+            <div class="member-dossier-summary">
+              <div>
+                <small>累计开台</small>
+                <strong>{{selectedMember?.visits||0}} <em>次</em></strong>
+              </div>
+              <div>
+                <small>累计消费</small>
+                <strong>¥{{money(selectedMember?.total_spend)}}</strong>
+              </div>
+              <div class="member-dossier-actions">
+                <button
+                  v-if="memberDetail.account.role!=='FRONT_DESK'"
+                  class="secondary"
+                  @click="memberEditing=!memberEditing;memberPasswordEditing=false"
+                >编辑资料</button>
+                <button
+                  v-if="memberDetail.account.password_account"
+                  class="secondary"
+                  @click="memberPasswordEditing=!memberPasswordEditing;memberEditing=false"
+                >重置登录密码</button>
+              </div>
+            </div>
+            <p class="error" v-if="memberError" role="alert">{{memberError}}</p>
+            <p class="bill-notice" v-if="memberMessage" role="status">{{memberMessage}}</p>
+            <div class="member-record-heading">
+              <div>
+                <small class="section-kicker">SESSION HISTORY</small>
+                <h3>消费订单</h3>
+              </div>
+              <span>一局一条 · 台费与服务费归集</span>
+            </div>
+            <div class="member-session-grid">
+              <article v-for="r in memberDetail.receipts" :key="r.id" class="member-session-card">
+                <div class="member-session-top">
+                  <strong>{{r.table_no}}</strong>
+                  <span>{{r.status==='ACTIVE'?'进行中':'已结束'}}</span>
+                </div>
+                <h4>{{r.title}}</h4>
+                <time>{{date(r.paid_at)}}</time>
+                <div class="member-session-fees">
+                  <span>开台费 <b>¥{{money(r.table_amount)}}</b></span>
+                  <span>已付服务费 <b>¥{{money(r.service_amount)}}</b></span>
+                </div>
+                <div class="member-session-bottom">
+                  <div>
+                    <small>本局已付</small>
+                    <strong>¥{{money(r.amount)}}</strong>
+                  </div>
+                  <button class="secondary" @click="showBill(r.id)">订单详情 ↗</button>
+                </div>
+                <small class="member-session-no">{{r.order_no.slice(0,16)}}</small>
+              </article>
+              <div v-if="!memberDetail.receipts.length" class="catalog-empty">还没有消费订单。</div>
+            </div>
+          </div>
+          <footer class="member-pagination-v2">
+            <button
+              class="secondary"
+              :disabled="memberPage===1||memberBusy"
+              @click="openMember(memberDetail.account.id,memberPage-1)"
+            >上一页</button>
+            <span>{{memberPage}}</span>
+            <button
+              class="secondary"
+              :disabled="!memberDetail.hasMore||memberBusy"
+              @click="openMember(memberDetail.account.id,memberPage+1)"
+            >下一页</button>
+          </footer>
+        </section>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div class="modal" v-if="storeBillDialog" @click.self="storeBillDialog=false">
+        <section class="dialog store-bill-dialog">
+          <header class="store-bill-head">
+            <div>
+              <small>SHENGTAI · MONTHLY STATEMENT</small>
+              <h2>门店账单</h2>
+              <p>收入、支出与人员工资，一本账看清。</p>
+            </div>
+            <button class="secondary icon-close" @click="storeBillDialog=false">×</button>
+          </header>
+          <div class="statement-toolbar">
+            <button class="secondary" aria-label="上一月" @click="shiftStoreMonth(-1)">‹</button>
+            <input type="month" v-model="storeMonth" @change="openStoreBill()" required />
+            <button class="secondary" aria-label="下一月" @click="shiftStoreMonth(1)">›</button>
+            <div class="statement-tabs">
+              <button
+                v-for="t in [['overview','收支总览'],['salary','人员工资'],['expenses','支出明细']]"
+                :class="{active:storeBillTab===t[0]}"
+                @click="storeBillTab=t[0]"
+              >{{t[1]}}</button>
+            </div>
+          </div>
+          <div class="statement-scroll">
+            <div v-if="storeBillLoading" class="statement-loading">正在整理 {{storeMonth}} 的账单…</div>
+            <p v-else-if="storeBillError" class="error">{{storeBillError}}</p>
+            <template v-else-if="storeBill">
+              <template v-if="storeBillTab==='overview'">
+                <div class="statement-total">
+                  <small>{{storeBill.month}} · 已登记收支结余</small>
+                  <strong>¥{{money(storeBill.income-billExpenses)}}</strong>
+                  <span>收入减去已登记支出</span>
+                </div>
+                <div class="statement-metrics">
+                  <article>
+                    <small>总收入</small>
+                    <strong>¥{{money(storeBill.income)}}</strong>
+                  </article>
+                  <article>
+                    <small>总支出</small>
+                    <strong>¥{{money(billExpenses)}}</strong>
+                  </article>
+                  <article>
+                    <small>已登记人员工资</small>
+                    <strong>¥{{money(billPayrollPaid)}}</strong>
+                  </article>
+                </div>
+                <h3>收款渠道</h3>
+                <div
+                  class="statement-channel"
+                  v-for="r in [['现金登记',storeBill.cashIncome],['扫码支付',storeBill.mockIncome],['圣泰钱包',storeBill.walletIncome]]"
+                >
+                  <span>{{r[0]}}</span>
+                  <strong>¥{{money(r[1])}}</strong>
+                </div>
+                <div class="settings-note">钱包充值不计入营业收入；工资以支出登记为准。人员工资页另列本月预计应发，不重复计入支出。</div>
+              </template>
+              <template v-else-if="storeBillTab==='salary'">
+                <div class="statement-metrics">
+                  <article>
+                    <small>本月预计应发</small>
+                    <strong>¥{{money(storeBill.payrollTotal)}}</strong>
+                  </article>
+                  <article>
+                    <small>已登记工资支出</small>
+                    <strong>¥{{money(billPayrollPaid)}}</strong>
+                  </article>
+                  <article>
+                    <small>预计未登记差额</small>
+                    <strong>¥{{money(billPayrollPending)}}</strong>
+                  </article>
+                </div>
+                <p class="settings-note">预计应发按当前助教薪酬规则与当月业绩计算，供核对使用；实际发放请登记人员工资支出。</p>
+                <div class="statement-salary-grid">
+                  <article v-for="c in storeBill.payroll" :key="c.id">
+                    <div>
+                      <span class="service-sku">{{serviceCode(c)}}</span>
+                      <h3>{{c.name}}</h3>
+                    </div>
+                    <small>当月预计应发</small>
+                    <strong>¥{{money(c.estimated_salary)}}</strong>
+                  </article>
+                </div>
+              </template>
+              <template v-else>
+                <div class="statement-channel" v-for="e in storeBill.expenses" :key="e.id">
+                  <div>
+                    <b>{{expenseCategories[e.category]||e.category}}</b>
+                    <small>{{String(e.expense_date).slice(0,10)}} · {{e.note}}</small>
+                  </div>
+                  <strong>− ¥{{money(e.amount)}}</strong>
+                </div>
+                <div v-if="!storeBill.expenses.length" class="catalog-empty">这个月暂无已登记支出。</div>
+              </template>
+            </template>
+          </div>
+        </section>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div class="modal" v-if="expenseDialog" @click.self="expenseDialog=false">
+        <section class="dialog atelier-ledger-dialog">
+          <header class="atelier-dialog-head">
+            <div>
+              <small class="section-kicker">EXPENSE LEDGER</small>
+              <h2>登记与查看</h2>
+              <p>{{finance?.month}} · 本月支出 ¥{{money(expenseTotal)}}</p>
+            </div>
+            <button class="secondary icon-close" @click="expenseDialog=false">×</button>
+          </header>
+          <div class="atelier-ledger-scroll">
+            <section class="expense-entry-card">
+              <h3>{{expenseEditing?'修改支出':'新增支出'}}</h3>
+              <p v-if="expenseMessage" class="bill-notice" role="status">{{expenseMessage}}</p>
+              <p v-if="error" class="error">{{error}}</p>
+              <form class="expense-form-grid" @submit.prevent="saveExpense">
+                <label>类别<desk-select v-model="expense.category"><option v-for="(label,key) in expenseCategories" :value="key">{{label}}</option><option value="CUSTOM">自定义</option></desk-select></label>
+                <label v-if="expense.category==='CUSTOM'">类别名称<input v-model.trim="expense.customCategory" maxlength="20" required></label>
+                <label>日期<input v-model="expense.date" type="date" required></label>
+                <label>金额<input v-model.number="expense.amount" type="number" min="0.01" max="99999" step="0.01" required></label>
+                <label>说明<input v-model="expense.note" maxlength="200" required placeholder="例如 购入皮头 10 枚"></label>
+                <div class="expense-form-actions dialog-actions">
+                  <button :disabled="busy">{{expenseEditing?'保存修改':'登记支出'}}</button>
+                  <button
+                    v-if="expenseEditing"
+                    type="button"
+                    class="secondary"
+                    @click="resetExpense"
+                  >取消修改</button>
+                </div>
+              </form>
+            </section>
+            <h3>本月支出明细</h3>
+            <div class="scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>类别</th>
+                    <th>说明</th>
+                    <th>金额</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="e in finance.expenses" :key="e.id">
+                    <td>{{String(e.expense_date).slice(0,10)}}</td>
+                    <td>{{expenseCategories[e.category]||e.category}}</td>
+                    <td>{{e.note}}</td>
+                    <td>¥{{money(e.amount)}}</td>
+                    <td>
+                      <div class="expense-row-actions">
+                        <button class="secondary" :disabled="busy" @click="editExpense(e)">修改</button>
+                        <button
+                          class="text-button danger-action"
+                          :disabled="busy"
+                          @click="cancelExpense(e)"
+                        >撤销</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr v-if="!finance.expenses.length">
+                    <td colspan="5">本月暂无支出登记</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <details class="cancelled-expenses" v-if="finance.cancelledExpenses?.length">
+              <summary>已撤销 {{finance.cancelledExpenses.length}} 笔</summary>
+              <div v-for="e in finance.cancelledExpenses" :key="e.id">
+                <span>{{String(e.expense_date).slice(0,10)}} · {{e.note}}</span>
+                <del>¥{{money(e.amount)}}</del>
+                <small>已撤销</small>
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div
+        class="modal atelier-top-modal"
+        v-if="memberEditing||memberPasswordEditing"
+        @click.self="memberEditing=false;memberPasswordEditing=false"
+      >
+        <form
+          class="dialog atelier-small-dialog"
+          @submit.prevent="saveMember(memberEditing?'profile':'password')"
+        >
+          <header class="atelier-dialog-head">
+            <div>
+              <small class="section-kicker">MEMBER SETTINGS</small>
+              <h2>{{memberEditing?'编辑会员资料':'重置登录密码'}}</h2>
+              <p>{{memberDetail?.account.nickname||memberDetail?.account.username}} · ID：{{memberDetail?.account.customer_code}}</p>
+            </div>
+            <button
+              type="button"
+              class="secondary icon-close"
+              @click="memberEditing=false;memberPasswordEditing=false"
+            >×</button>
+          </header>
+          <div class="atelier-form-body">
+            <template v-if="memberEditing">
+              <label>会员昵称<input v-model.trim="memberDraft.nickname" required maxlength="24"></label>
+              <div class="service-fields">
+                <label>年龄<input v-model="memberDraft.age" type="number" min="1" max="120"></label>
+                <label>性别<desk-select v-model="memberDraft.gender"><option>男</option><option>女</option><option>不显示</option></desk-select></label>
+              </div>
+            </template>
+            <template v-else>
+              <div class="settings-note">设置新的登录密码，会员下次登录时使用。</div>
+              <label>新登录密码<input v-model="newMemberPassword" type="password" autocomplete="new-password" minlength="8" maxlength="72" required placeholder="输入至少 8 位新密码"></label>
+            </template>
+            <p v-if="memberError" class="error">{{memberError}}</p>
+          </div>
+          <footer class="atelier-dialog-footer dialog-actions">
+            <button :disabled="memberBusy">{{memberBusy?'保存中…':memberEditing?'保存资料':'确认重置'}}</button>
+            <button
+              type="button"
+              class="secondary"
+              @click="memberEditing=false;memberPasswordEditing=false"
+            >取消</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div class="modal bill-modal" v-if="bill">
+        <section class="dialog bill-dialog compact-bill">
+          <div class="bill-heading">
+            <div>
+              <small>本局账单 · {{bill.playOrder.order_no.slice(0,13)}}</small>
+              <p v-if="bill.accountName">消费账户 · {{bill.accountName}}</p>
+              <h2>{{bill.playOrder.table_no}} · {{settlementLabels[bill.settlementStatus]}}</h2>
+            </div>
+            <div class="bill-heading-actions">
+              <button
+                v-if="bill.playOrder.status==='ACTIVE'"
+                :disabled="busy"
+                @click="toggleBillTool('service')"
+              >＋ 选择服务</button>
+              <button
+                v-if="bill.playOrder.status==='ACTIVE'"
+                class="secondary"
+                :disabled="busy||!bill.canAssignCustomer"
+                @click="toggleBillTool('customer')"
+              >{{bill.canAssignCustomer?'关联顾客':'已关联顾客'}}</button>
+              <button
+                class="secondary icon-close"
+                :disabled="busy"
+                @click="bill=null;billTool=''"
+                aria-label="关闭本局账单"
+              >×</button>
+            </div>
+          </div>
+          <p class="error" v-if="error">{{error}}</p>
+          <div class="compact-bill-line">
+            <div>
+              <strong>{{bill.playOrder.package_name}}</strong>
+              <small>球桌套餐 · {{tablePaidLabel(bill.playOrder)}}</small>
+            </div>
+            <strong>¥{{money(bill.tablePaid)}}</strong>
+          </div>
+          <div class="compact-bill-line" v-for="o in bill.services" :key="o.id">
+            <div>
+              <strong>{{o.item_name}}</strong>
+              <small>{{serviceStatusLabel(o)}}<template v-if="o.settled_at && o.status==='ACTIVE'"> · 已付款</template></small>
+            </div>
+            <div>
+              <strong>{{serviceAmount(o)==='—'?'—':'¥'+serviceAmount(o)}}</strong>
+              <button
+                v-if="o.kind==='CUE'&&o.status==='REQUESTED'"
+                class="secondary"
+                :disabled="busy"
+                @click="serviceAction(o,'start')"
+              >交付球杆</button>
+              <button
+                v-if="o.kind==='CUE'&&o.status==='ACTIVE'"
+                class="secondary"
+                :disabled="busy"
+                @click="serviceAction(o,'finish')"
+              >确认归还</button>
+              <button
+                v-if="o.kind==='COACH'&&o.status==='ACTIVE'"
+                class="secondary"
+                :disabled="busy"
+                @click="serviceAction(o,'finish')"
+              >结束助教</button>
+              <button
+                v-if="o.kind==='COACH'&&o.status==='REQUESTED'"
+                class="secondary"
+                :disabled="busy"
+                @click="serviceAction(o,'start')"
+              >开始服务</button>
+              <button
+                v-if="o.status==='REQUESTED'"
+                class="text-button"
+                :disabled="busy"
+                @click="serviceAction(o,'cancel')"
+              >取消申请</button>
+            </div>
+          </div>
+          <div class="bill-fee-trio">
+            <div>
+              <small>开台费</small>
+              <strong>¥{{money(bill.tablePaid)}}</strong>
+            </div>
+            <div>
+              <small>服务费{{runningServices(bill)?' · 当前':'合计'}}</small>
+              <strong>¥{{money(bill.estimatedServiceTotal)}}</strong>
+            </div>
+            <div>
+              <small>开台＋服务合计</small>
+              <strong>¥{{money(bill.totalAmount)}}</strong>
+              <span>已付 ¥{{money(bill.paidAmount)}}</span>
+            </div>
+          </div>
+          <p v-if="billNotice" class="bill-notice">✓ {{billNotice}}</p>
+          <div class="actions">
+            <button
+              v-if="bill.playOrder.status==='ACTIVE'"
+              :disabled="busy"
+              @click="finish(bill.playOrder.id)"
+            >结束本局</button>
+            <div v-if="canSettleBill" class="bill-settlement-bar">
+              <div>
+                <small>本次待收</small>
+                <strong>¥{{money(bill.unpaidAmount)}}</strong>
+              </div>
+              <label>收款方式<desk-select v-model="settleMethod"><option value="CASH">现金收款</option><option value="MOCK">扫码支付</option></desk-select></label>
+              <button :disabled="busy" @click="settleBill">确认收款并结清</button>
+            </div>
+            <button class="secondary" :disabled="busy" @click="showBill(bill.playOrder.id)">刷新</button>
+          </div>
+        </section>
+        <div class="modal bill-tool-overlay" v-if="billTool" @click.self="billTool=''">
+          <section class="dialog compact-bill tool-dialog"><div class="tool-dialog-heading"><div><small class="section-kicker">SHENGTAI · SESSION</small><h2>{{billTool==='service'?'选择本局服务':'关联本局顾客'}}</h2></div><button class="secondary icon-close" :disabled="busy" @click="billTool=''" aria-label="关闭选择框">×</button></div><p v-if="error" class="error">{{error}}</p> <section v-if="billTool==='service'&&bill.playOrder.status==='ACTIVE'" class="bill-tool-panel">
+  <div class="bill-picker-heading"><div><small>SERVICE SELECTION</small><h3>为本局挑选服务</h3></div><div class="bill-kind-tabs"><button :class="{active:frontServiceKind==='COACH'}" @click="frontServiceKind='COACH';frontServiceId=''">台球助教</button><button :class="{active:frontServiceKind==='CUE'}" @click="frontServiceKind='CUE';frontServiceId=''">球杆租赁</button></div></div>
+  <input class="bill-search" v-model="frontServiceSearch" placeholder="搜索姓名、球杆名称或品牌" aria-label="搜索服务">
+  <div class="bill-service-grid"><button v-for="item in frontServiceCards" :key="item.id" class="secondary bill-service-option" :class="{selected:Number(frontServiceId)===Number(item.id)}" @click="frontServiceId=item.id"><img :src="item.image_path" :alt="item.name" :class="{coach:item.kind==='COACH'}"><span class="bill-option-info"><small>{{serviceCode(item)}} · {{item.kind==='COACH'?(item.star_level+'星 · '+(item.grade_title||'台球助教')):item.brand}}</small><strong>{{item.name}}</strong><span><b>¥{{money(frontHourly(item))}}</b><small> / 小时</small></span></span><i class="bill-selection-dot">{{Number(frontServiceId)===Number(item.id)?'✓':''}}</i></button><p v-if="!frontServiceCards.length" class="bill-empty">没有匹配的可用服务</p></div>
+  <div class="front-payment-methods"><div><strong>本次服务收款</strong><small>可与开台时的付款方式不同</small></div><label :class="{chosen:frontServiceMethod==='CASH'}"><input type="radio" value="CASH" v-model="frontServiceMethod">现金收款</label><label :class="{chosen:frontServiceMethod==='MOCK'}"><input type="radio" value="MOCK" v-model="frontServiceMethod">扫码支付</label></div><form class="bill-pay-footer" @submit.prevent="bookFrontService"><div class="bill-duration"><small>服务时长</small><div><button type="button" aria-label="减少时长" :disabled="frontServiceHours<=1||busy" @click="frontServiceHours=Math.max(1,Number(frontServiceHours)-1)">−</button><strong>{{frontServiceHours}}<small> 小时</small></strong><button type="button" aria-label="增加时长" :disabled="frontServiceHours>=12||busy" @click="frontServiceHours=Math.min(12,Number(frontServiceHours)+1)">＋</button></div></div><div class="bill-pay-amount"><small>{{frontChoice?frontChoice.name:'请先选择服务'}}</small><strong>¥{{frontServiceQuote}}</strong></div><button class="bill-pay-button" :disabled="busy||!frontChoice">支付并添加 <span>→</span></button></form>
+ </section>
+ <section v-if="billTool==='customer'&&bill.canAssignCustomer" class="bill-tool-panel">
+  <div class="bill-picker-heading"><div><small>CUSTOMER CONNECTION</small><h3>将本局关联到顾客</h3></div><span class="bill-panel-hint">手机订单与消费记录同步</span></div>
+  <input class="bill-search" v-model="customerSearch" placeholder="搜索顾客编号、账号或昵称" aria-label="搜索顾客">
+  <div class="bill-customer-grid"><button v-for="member in customerCards" :key="member.id" class="secondary bill-customer-option" :class="{selected:Number(customerId)===Number(member.id)}" @click="customerId=String(member.id)"><span class="bill-customer-avatar">{{(member.nickname||member.username).slice(0,1).toUpperCase()}}</span><span class="bill-customer-info"><strong>{{member.nickname||member.username}}</strong><small>ID：{{member.customer_code}} · {{member.username}}</small></span><span class="bill-customer-tier">{{member.tier}}</span><i class="bill-selection-dot">{{Number(customerId)===Number(member.id)?'✓':''}}</i></button><p v-if="!customerCards.length" class="bill-empty">没有匹配的会员，请核对顾客编号</p></div>
+  <div class="bill-link-footer"><span>{{customerChoice?'已选择 '+(customerChoice.nickname||customerChoice.username):'选择顾客后确认关联'}}</span><button :disabled="busy||!customerChoice" @click="linkCustomer">确认关联 <span>→</span></button></div>
+ </section>
+</section>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+  <Transition name="desk-sheet">
+    <Teleport to="body">
+      <div class="layout desk-portal">
+        <div class="modal opening-overlay" v-if="selected">
+          <form
+            class="dialog opening-dialog"
+            aria-labelledby="opening-title"
+            aria-modal="true"
+            role="dialog"
+            @submit.prevent="open"
+          >
+            <div class="opening-hero">
+              <div>
+                <small>球桌工作台 / 收款开台</small>
+                <h2 id="opening-title">{{selected.table_no}} <span>前台开台</span></h2>
+                <p>{{selected.type}} · {{selected.brand}} {{selected.model_name}}</p>
+              </div>
+              <img v-if="selected.image_path" :src="selected.image_path" alt="" />
+              <button
+                type="button"
+                class="secondary opening-close"
+                aria-label="关闭开台弹窗"
+                :disabled="busy"
+                @click="selected=null"
+              >×</button>
+            </div>
+            <div class="opening-content">
+              <fieldset>
+                <legend>选择套餐</legend>
+                <div v-if="selectedPackages.length" class="opening-options">
+                  <label
+                    v-for="pack in selectedPackages"
+                    :key="pack.id"
+                    class="opening-option"
+                    :class="{chosen:packageId===pack.id}"
+                  >
+                    <input type="radio" v-model="packageId" :value="pack.id" />
+                    <span>
+                      <strong>{{pack.name}}</strong>
+                      <small>{{pack.minutes}} 分钟</small>
+                    </span>
+                    <b>¥{{money(pack.price)}}</b>
+                  </label>
+                </div>
+                <p v-else>这张球桌暂无可用套餐。</p>
+              </fieldset>
+              <fieldset>
+                <legend>收款方式</legend>
+                <div class="opening-options">
+                  <label class="opening-option" :class="{chosen:method==='CASH'}">
+                    <input type="radio" v-model="method" value="CASH" />
+                    <span>
+                      <strong>现金收款</strong>
+                      <small>到账后确认开台</small>
+                    </span>
+                  </label>
+                  <label class="opening-option" :class="{chosen:method==='MOCK'}">
+                    <input type="radio" v-model="method" value="MOCK" />
+                    <span>
+                      <strong>扫码支付</strong>
+                      <small>核对到账后登记</small>
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
+              <details class="store-payment-panel">
+                <summary>查看门店微信收款码</summary>
+                <img src="./store-qr.png" alt="门店微信收款码" />
+                <p>请核对到账金额后再开台。</p>
+              </details>
+              <p class="error" v-if="error" role="alert">{{error}}</p>
+            </div>
+            <footer class="opening-footer">
+              <div>
+                <small>本局金额</small>
+                <strong>{{activePackage?'¥'+money(activePackage.price):'—'}}</strong>
+              </div>
+              <button :disabled="busy||!activePackage">确认收款并开台</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+    </Teleport>
+  </Transition>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div class="modal demo-checkout" v-if="demoCheckout">
+        <div class="dialog demo-checkout-card">
+          <Transition name="receipt-stage" mode="out-in">
+            <section v-if="demoCheckout.paid" key="success" class="receipt-state receipt-success">
+              <div class="receipt-symbol receipt-success-symbol">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="4,12 10,18 20,6" />
+                </svg>
+              </div>
+              <h2>收款已确认</h2>
+              <strong>¥{{demoCheckout.amount}}</strong>
+              <p>{{demoCheckout.message || demoCheckout.table+' 已开台'}}</p>
+              <div class="receipt-stage-footer">
+                <button @click="demoCheckout=null">完成</button>
+              </div>
+            </section>
+            <section v-else-if="demoCheckout.awaiting" key="code" class="receipt-state">
+              <h2>扫码支付</h2>
+              <strong>¥{{demoCheckout.amount}}</strong>
+              <img class="receipt-code" src="./store-qr.png" alt="门店微信收款码" />
+              <p>请使用微信扫码，前台核对到账后确认</p>
+              <div class="dialog-actions receipt-actions receipt-stage-footer">
+                <button type="button" @click="confirmReceipt(true)">已核对到账</button>
+                <button type="button" class="secondary" @click="confirmReceipt(false)">取消</button>
+              </div>
+            </section>
+            <section v-else key="processing" class="receipt-state receipt-processing">
+              <h2>{{demoCheckout.method==='CASH'?'现金收款':'确认收款'}}</h2>
+              <strong>¥{{demoCheckout.amount}}</strong>
+              <div class="receipt-symbol receipt-orbit">
+                <div class="receipt-banknote">
+                  <i></i>
+                </div>
+              </div>
+              <p>{{demoCheckout.method==='CASH'?'正在登记现金收款':'正在确认收款结果'}}</p>
+              <div class="receipt-progress">
+                <span></span>
+              </div>
+            </section>
+          </Transition>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="layout desk-portal">
+      <div v-if="prompt" class="modal prompt-overlay" @keydown.esc="answerPrompt(false)">
+        <section
+          class="dialog prompt-dialog"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="prompt-title"
+        >
+          <span class="prompt-icon">↗</span>
+          <h2 id="prompt-title">{{prompt.title}}</h2>
+          <div class="prompt-content">
+            <p v-for="(part,i) in prompt.paragraphs" :key="i">{{part}}</p>
+          </div>
+          <footer class="dialog-actions">
+            <button autofocus @click="answerPrompt(true)">确认</button>
+            <button class="secondary" @click="answerPrompt(false)">取消</button>
+          </footer>
+        </section>
+      </div>
+    </div>
+  </Teleport>
+</div>

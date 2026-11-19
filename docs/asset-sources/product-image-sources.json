@@ -1,0 +1,50 @@
+[
+  {
+    "key": "joy-gold",
+    "source": "https://www.joy147.com/newsinfo/106285.html",
+    "imageUrl": "https://nwzimg.wezhan.cn/contents/sitefiles2025/10125453/images/59751492.jpg",
+    "local": "/assets/catalog/joy-gold.jpg"
+  },
+  {
+    "key": "star-s101",
+    "source": "https://www.xingpaibilliard.com/cp/qzyp/snktqz/2024/05/10/26798.html",
+    "imageUrl": "https://www.xingpaibilliard.com/wp-content/uploads/2024/05/2025080801531550.jpg",
+    "local": null
+  },
+  {
+    "key": "star-nine",
+    "source": "https://www.xingpaibilliard.com/cp/qzyp/msjqtqz/2016/12/20/247.html",
+    "imageUrl": "https://www.xingpaibilliard.com/wp-content/uploads/2016/12/2025080802042735.jpg",
+    "local": null
+  },
+  {
+    "key": "star-eagle",
+    "source": "https://www.xingpaibilliard.com/cp/qzyp/msjqtqz/2025/05/10/29517.html",
+    "imageUrl": "https://www.xingpaibilliard.com/wp-content/uploads/2025/05/2025072901043038.png",
+    "local": null
+  },
+  {
+    "key": "kangxi-kx08",
+    "source": "https://www.kxss147.com/zh/products/view/?c=kx08",
+    "imageUrl": "https://www.kxss147.com/images/products/kx08.jpg",
+    "local": "/assets/catalog/kangxi-kx08.jpg"
+  },
+  {
+    "key": "kangxi-blaze",
+    "source": "https://www.kxss147.com/zh/products/view/?c=kx11",
+    "imageUrl": "https://file.hysz365.com/BASE__FILE/2026/06/14/98b3fd456a8b464e911742d37989f883.jpg",
+    "local": "/assets/catalog/kangxi-blaze.jpg"
+  },
+  {
+    "key": "star-s101",
+    "source": "https://www.xingpaishop.com/product/xw101-12s-2",
+    "imageUrl": "https://img.xingpaishop.com/wp-content/uploads/2020/03/S101_04.png",
+    "local": "/assets/catalog/star-s101.jpg"
+  },
+  {
+    "key": "star-nine",
+    "source": "https://www.xingpaishop.com/product/xw136-9b",
+    "imageUrl": "https://img.xingpaishop.com/wp-content/uploads/2018/09/2025053001122786.jpg",
+    "local": "/assets/catalog/star-nine.jpg"
+  }
+]

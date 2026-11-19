@@ -1,0 +1,8 @@
+Mode: built-in image_gen, transparent_background=true.
+Common prompt: Use case background-extraction/product-mockup. One isolated photorealistic billiards table, complete table and all feet fully inside frame, centered in landscape framing, studio product lighting, clean antialiased edges, transparent background. No typography, letters, numbers, logos, watermark, captions, price tags, layout panels, props, people or cue sticks. Preserve realistic proportions and pocket count.
+joy-gold: Extract/redraw only the complete green Chinese eight-ball table with gold carved legs in the source poster; preserve rails, pockets and legs.
+joy-rose: Generate an illustrative rose-gold-leg Chinese eight-ball table based on the source gold table, green felt, dark polished rails and rose-gold carved metallic legs. Generic illustrative variant, not exact certified brand photo.
+kangxi-kx08: Extract/redraw only the green table with black and gold rails and sculpted gold legs, removing advertisements.
+kangxi-blaze: Extract/redraw only the complete red/black Chinese eight-ball table with green cloth; preserve patterned red apron and dark cylindrical legs.
+star-nine: Extract/redraw only the American nine-ball table with blue cloth, reddish-brown body, chrome corners and pedestal legs. Remove balls, logos and text.
+star-s101: Extract/redraw only the full-size snooker table with green cloth, black apron, gold trim and six carved gold legs; remove carpet and room.

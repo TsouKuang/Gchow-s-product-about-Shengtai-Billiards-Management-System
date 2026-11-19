@@ -1,0 +1,7 @@
+www.yongzhoushengtai.homes {
+    reverse_proxy https://115.29.172.59 {
+        transport http {
+            tls_server_name www.yongzhoushengtai.homes
+        }
+    }
+}

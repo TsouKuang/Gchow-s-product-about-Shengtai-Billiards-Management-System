@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="ball" cx="36%" cy="28%" r="82%">
+      <stop offset="0%" stop-color="#4a8a6b"/>
+      <stop offset="42%" stop-color="#2b6b50"/>
+      <stop offset="100%" stop-color="#0a2118"/>
+    </radialGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eeda9f"/>
+      <stop offset="48%" stop-color="#c8a34e"/>
+      <stop offset="100%" stop-color="#8c6d2c"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="30%" cy="20%" r="52%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- cue -->
+  <g opacity="0.85">
+    <line x1="18" y1="224" x2="200" y2="64" stroke="#d9ceb2" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="200" y1="64" x2="234" y2="36" stroke="#c8a34e" stroke-width="4.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- ball -->
+  <circle cx="128" cy="128" r="106" fill="url(#ball)"/>
+  <circle cx="128" cy="128" r="106" fill="url(#sheen)"/>
+
+  <!-- S monogram -->
+  <path d="M110 88 C152 88 152 124 128 128 C104 132 104 168 146 168" fill="none" stroke="#f5f0e2" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- brass ring -->
+  <circle cx="128" cy="128" r="120" fill="none" stroke="url(#brass)" stroke-width="2.5"/>
+  <circle cx="128" cy="128" r="126.5" fill="none" stroke="#c8a34e" stroke-opacity="0.30" stroke-width="1"/>
+</svg>

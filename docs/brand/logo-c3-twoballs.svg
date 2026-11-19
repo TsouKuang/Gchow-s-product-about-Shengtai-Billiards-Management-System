@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="ball" cx="36%" cy="28%" r="82%">
+      <stop offset="0%" stop-color="#4a8a6b"/>
+      <stop offset="42%" stop-color="#2b6b50"/>
+      <stop offset="100%" stop-color="#0a2118"/>
+    </radialGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eeda9f"/>
+      <stop offset="48%" stop-color="#c8a34e"/>
+      <stop offset="100%" stop-color="#8c6d2c"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="30%" cy="20%" r="52%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- cue behind -->
+  <g opacity="0.88">
+    <line x1="20" y1="218" x2="236" y2="38" stroke="#d9ceb2" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- solid ball (left) -->
+  <circle cx="104" cy="128" r="62" fill="url(#ball)"/>
+  <circle cx="104" cy="128" r="62" fill="url(#sheen)"/>
+  <circle cx="88" cy="110" r="4" fill="#c8a34e"/>
+
+  <!-- hollow ball (right) -->
+  <circle cx="152" cy="128" r="62" fill="none" stroke="url(#brass)" stroke-width="3"/>
+  <circle cx="152" cy="128" r="69" fill="none" stroke="#c8a34e" stroke-opacity="0.28" stroke-width="1.2"/>
+</svg>

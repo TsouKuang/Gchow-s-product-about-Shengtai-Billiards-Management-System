@@ -1,0 +1,117 @@
+{
+  "peri": {
+    "page": "https://www.pericue.com/ProductDetail/10831539.html",
+    "images": [
+      "https://img.wds168.cn/images/imgbg.png",
+      "https://img.wds168.cn/comdata/104542/202506/202506131355297c2b50.png",
+      "https://img.wds168.cn/comdata/104542/202506/20250612145921e5fd13.png",
+      "https://img.wds168.cn/comdata/104542/202508/202508071307181862ae.jpg",
+      "https://cdn.img-sys.com/comdata/104542/product/2025060415155104EDEB0E59EEB337_s.jpg",
+      "https://img.wds168.cn/comdata/104542/product/2025060415155104EDEB0E59EEB337_b.jpg",
+      "https://img.wds168.cn/skinp/modules/ModuleProductDetailGiant/images/touming.png",
+      "https://img.wds168.cn/comdata/104542/product/20250614101401030C8D4D3BFEFF04_b.jpg",
+      "https://img.wds168.cn/comdata/104542/product/20250614101402705F858AC47F3797_b.jpg",
+      "https://img.wds168.cn/comdata/104542/product/202506141014046EDA69DCF3BFF151_b.jpg",
+      "https://img.wds168.cn/comdata/104542/product/20250614101405D4BEC4EBEFDFD3F3_b.jpg",
+      "https://img.wds168.cn/comdata/104542/product/20250614101408BCBBE53C915E5BFD_b.jpg",
+      "https://img.wds168.cn/skinp/modules/ModuleProductDetailGiant/images/back2.png",
+      "https://img.wds168.cn/comdata/104542/202508/2025080617290148d27b.jpg",
+      "https://img.wds168.cn/comdata/104542/202505/202505071047593e6c57.jpg",
+      "https://img.wds168.cn/comdata/104542/202505/20250507104759ad422a.jpg",
+      "https://img.wds168.cn/comdata/104542/202505/20250507104759766e67.jpg",
+      "https://img.wds168.cn/comdata/104542/202505/20250507104759ca95a9.jpg",
+      "https://img.wds168.cn/skinp/common/mobile/images/qrcode/close.png",
+      "https://img.wds168.cn/skinp/common/mobile/css/loading-4.gif",
+      "https://img.wds168.cn/skinp/common/mobile/images/qrcode/link.png",
+      "https://img.wds168.cn/skinp/common/mobile/images/qrcode/down.png",
+      "https://img.wds168.cn/comdata/104542/202505/2025051915384465df7e.png",
+      "https://www.pericue.com/index.php?c=front/Qrcode&a=getFloatNavQrCode",
+      "https://www.pericue.com/index.php?c=front/Qrcode&a=getFootNavQrCode",
+      "https://img.wds168.cn/images/wxsuccess.gif"
+    ]
+  },
+  "mezz": {
+    "page": "https://mezzcue.com/en/products_pool/cues/playcue/ace",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)>"
+  },
+  "fury": {
+    "page": "https://www.furycues.cn/",
+    "images": [
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/e982a35d-035d-4c39-b1dd-cc7d6a1a244c.png",
+      "https://www.furycues.cn/npublic/img/s.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/vedio/c03282c5-4730-4530-9bed-794660cb31fb.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/29808aef-d09a-49df-92bc-89915e36528b.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/87ac48e3-44a7-42d9-a080-ff1305503b96.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/8c0a439c-e994-4abd-bc56-ed21e696f2d5.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/295e807f-6677-4c84-9dbc-49a1278e5c58.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/516631ce-f8c0-4d52-92d7-eb14943a16e3.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/5cee8b4c-4f34-4f22-80b2-8eabfd65815d.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/d57fc989-07e0-40ce-923a-6f4d3f303bb3.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/1b7442f6-bc15-4141-9c21-076081352369.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/ba7f56c9-68a6-474b-bae0-c29151948f50.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/c7c7d257-9e2e-4f96-a543-1a7045fe00b3.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/547d16fb-2b3b-4126-9612-b2ddb12b7f34.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/90b07175-da98-4c0b-9575-8d0c9e8b4a0d.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/88440137-2cc1-4c8e-bee5-fa1d0b8cb15e.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/e1fc9fbb-8999-47eb-918d-6b9467ec72f2.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2024043018183039371/cms/image/cc004a82-487c-41ba-a3fc-a5aeb07c05ce.png"
+    ]
+  },
+  "yebao": {
+    "page": "https://yebaocues.com/product.cues-of-hardcore2",
+    "images": [
+      "https://oss.yebaocues.com/assets/img/yb-logo-black.svg",
+      "https://oss.yebaocues.com/images/2022/03/9C5F1B9C-A664-4210-BC2C-89A5CD08D7AB.png",
+      "https://oss.yebaocues.com/images/2022/03/6D8EAB98-A391-4637-8FC3-B1D26C26FF8E.png",
+      "https://oss.yebaocues.com/assets/img/yb-logo-white.svg",
+      "https://oss.yebaocues.com/assets/img/XEshaft.svg"
+    ]
+  },
+  "omin": {
+    "page": "https://gb.omincn.com/",
+    "images": [
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/9a3f6c19-9d3a-4f9c-905b-0e029870001a.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/6692b109-ba78-404c-864c-f9f152501a12.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/2c31af1c-f9d6-4576-9c4c-3415cce4ee35.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/e7b9d86d-1cdb-4201-82a9-9657e98a884a.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/a3b345f5-574b-4341-bc33-58fccb7474f3.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/d8615fd1-f8df-4672-9d9c-e74d13ef9302.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/5e5a15c7-6443-4b9b-85cc-0c17458d8e3c.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/ebf886cf-400e-4e64-a937-721d5b74037b.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/551ac8e3-b94c-4667-bd23-c1806ae3c036.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/a3106472-977d-4df0-a9ba-59677bdfe6e1.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/368090f6-ad90-4d16-b570-c5a84eb1540e.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/69ec43d8-2710-496f-be4e-10ac3f73791e.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/64bdde74-bd8b-4b87-aab0-52fefc32dc92.jpg",
+      "https://gb.omincn.com/npublic/img/share-weibo.png",
+      "https://gb.omincn.com/npublic/img/share-wechat.png",
+      "https://gb.omincn.com/npublic/img/share-moments.png",
+      "https://gb.omincn.com/npublic/img/share-qq.png",
+      "https://gb.omincn.com/npublic/img/share-qzone.png",
+      "https://gb.omincn.com/npublic/img/share-copyLink.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/8290f14c-e402-4d7b-b98a-18f6ec670697.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/69af72ba-ed26-48a5-a9af-db8f47b2af00.jpg",
+      "https://omo-oss-image.thefastimg.com/portal-saas/pg2026072020411991895/cms/image/3dc873b9-64eb-4e7f-b697-efa04f5f8bee.png",
+      "https://omo-oss-image.thefastimg.com/portal-saas/demo_d83bc9af8bb342749ecf5b9c474b30c5/cms/image/e8777a0d-b2d9-4145-ba2e-e3a9dadab792.png"
+    ]
+  },
+  "parris": {
+    "page": "https://www.parriscues.com/",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  "zen": {
+    "page": "https://www.zencustomcuehk.com/",
+    "images": [
+      "https://static.wixstatic.com/media/425567_ae4c16228d3541959ac4c9d2bcacba6f~mv2.png/v1/fill/w_39,h_37,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/%E8%9E%A2%E5%B9%95%E6%88%AA%E5%9C%96%202022-03-23%20%E4%B8%8A%E5%8D%8812_01_15.png",
+      "https://static.wixstatic.com/media/425567_7790d1b4b86349b3a4ade0e31058b1c8~mv2.jpg/v1/fill/w_113,h_88,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/425567_7790d1b4b86349b3a4ade0e31058b1c8~mv2.jpg",
+      "https://static.wixstatic.com/media/425567_917ee9df69ae41cd841ff2fada0d4392f000.jpg/v1/fill/w_980,h_432,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/425567_917ee9df69ae41cd841ff2fada0d4392f000.jpg",
+      "https://static.wixstatic.com/media/425567_e96fa05b043941bd855d5866de190ada~mv2.jpg/v1/fill/w_78,h_59,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/425567_e96fa05b043941bd855d5866de190ada~mv2.jpg",
+      "https://static.wixstatic.com/media/425567_2c6bff493fd5449786b2196b1441b87b~mv2.jpg/v1/fill/w_111,h_74,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/425567_2c6bff493fd5449786b2196b1441b87b~mv2.jpg",
+      "https://static.wixstatic.com/media/425567_a2756cd5b8294f158871793262debf9f~mv2.jpg/v1/fill/w_106,h_75,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/425567_a2756cd5b8294f158871793262debf9f~mv2.jpg",
+      "https://static.wixstatic.com/media/425567_4c90b8384eed49ccb62b58d8c07747a9~mv2.jpg/v1/fill/w_106,h_70,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/425567_4c90b8384eed49ccb62b58d8c07747a9~mv2.jpg",
+      "https://static.wixstatic.com/media/425567_9fa321b6f68449b8bfd318fb3778d18c~mv2.jpg/v1/fill/w_111,h_83,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/425567_9fa321b6f68449b8bfd318fb3778d18c~mv2.jpg",
+      "https://static.wixstatic.com/media/40898a93cfff4578b1779073137eb1b4.png/v1/fill/w_39,h_39,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/40898a93cfff4578b1779073137eb1b4.png",
+      "https://static.wixstatic.com/media/425567_4806f35eb87a41e4941abdc8aa964e1d~mv2.jpeg/v1/fill/w_422,h_408,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/C5FCA030-CBD9-4A51-8ECF-AF1F071E2DC9.jpeg"
+    ]
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "portraits": [
+    {
+      "key": "coach-tangtang",
+      "image_path": "/assets/services/coach-youth-01.jpg",
+      "age": 23
+    },
+    {
+      "key": "coach-mianmian",
+      "image_path": "/assets/services/coach-youth-02.jpg",
+      "age": 23
+    },
+    {
+      "key": "coach-nuonuo",
+      "image_path": "/assets/services/coach-youth-03.jpg",
+      "age": 24
+    },
+    {
+      "key": "coach-tianxin",
+      "image_path": "/assets/services/coach-youth-04.jpg",
+      "age": 22
+    },
+    {
+      "key": "coach-xingyao",
+      "image_path": "/assets/services/coach-youth-05.jpg",
+      "age": 25
+    },
+    {
+      "key": "coach-zhixia",
+      "image_path": "/assets/services/coach-youth-06.jpg",
+      "age": 23
+    },
+    {
+      "key": "coach-wanqing",
+      "image_path": "/assets/services/coach-youth-07.jpg",
+      "age": 24
+    },
+    {
+      "key": "coach-ruoxi",
+      "image_path": "/assets/services/coach-youth-08.jpg",
+      "age": 22
+    },
+    {
+      "key": "coach-jingchuan",
+      "image_path": "/assets/services/coach-youth-15.jpg",
+      "age": 26
+    },
+    {
+      "key": "coach-yuheng",
+      "image_path": "/assets/services/coach-youth-16.jpg",
+      "age": 28
+    },
+    {
+      "key": "coach-chenyuan",
+      "image_path": "/assets/services/coach-youth-17.jpg",
+      "age": 27
+    },
+    {
+      "key": "coach-junting",
+      "image_path": "/assets/services/coach-youth-18.jpg",
+      "age": 29
+    }
+  ],
+  "newItems": [
+    {
+      "key": "coach-qianqian",
+      "kind": "COACH",
+      "brand": "台球助教",
+      "name": "芊芊",
+      "gender": "女",
+      "star_level": 3,
+      "age": 25,
+      "height_cm": 168,
+      "weight_kg": 50,
+      "personality": "温柔耐心 · 清晰讲解",
+      "specialties": "基础站姿与直线出杆",
+      "description": "芊芊 · 温柔耐心 · 清晰讲解。根据你的练习目标安排节奏，从热身到对局逐步进入状态。适合预约基础站姿与直线出杆，可在服务前沟通练习需求。",
+      "rate": 1,
+      "stock": 1,
+      "enabled": true,
+      "image_path": "/assets/services/coach-youth-09.jpg",
+      "source_url": ""
+    },
+    {
+      "key": "coach-chuqing",
+      "kind": "COACH",
+      "brand": "台球助教",
+      "name": "初晴",
+      "gender": "女",
+      "star_level": 4,
+      "age": 24,
+      "height_cm": 166,
+      "weight_kg": 49,
+      "personality": "活泼开朗 · 轻松陪练",
+      "specialties": "薄球瞄准与母球走位",
+      "description": "初晴 · 活泼开朗 · 轻松陪练。根据你的练习目标安排节奏，从热身到对局逐步进入状态。适合预约薄球瞄准与母球走位，可在服务前沟通练习需求。",
+      "rate": 1.5,
+      "stock": 1,
+      "enabled": true,
+      "image_path": "/assets/services/coach-youth-10.jpg",
+      "source_url": ""
+    },
+    {
+      "key": "coach-muyao",
+      "kind": "COACH",
+      "brand": "台球助教",
+      "name": "沐瑶",
+      "gender": "女",
+      "star_level": 5,
+      "age": 23,
+      "height_cm": 170,
+      "weight_kg": 52,
+      "personality": "细致专注 · 节奏稳定",
+      "specialties": "连续进攻与分球思路",
+      "description": "沐瑶 · 细致专注 · 节奏稳定。根据你的练习目标安排节奏，从热身到对局逐步进入状态。适合预约连续进攻与分球思路，可在服务前沟通练习需求。",
+      "rate": 2,
+      "stock": 1,
+      "enabled": true,
+      "image_path": "/assets/services/coach-youth-11.jpg",
+      "source_url": ""
+    },
+    {
+      "key": "coach-kesong",
+      "kind": "COACH",
+      "brand": "台球助教",
+      "name": "可颂",
+      "gender": "女",
+      "star_level": 3,
+      "age": 25,
+      "height_cm": 165,
+      "weight_kg": 48,
+      "personality": "亲切健谈 · 新手友好",
+      "specialties": "中式八球入门与练球计划",
+      "description": "可颂 · 亲切健谈 · 新手友好。根据你的练习目标安排节奏，从热身到对局逐步进入状态。适合预约中式八球入门与练球计划，可在服务前沟通练习需求。",
+      "rate": 1,
+      "stock": 1,
+      "enabled": true,
+      "image_path": "/assets/services/coach-youth-12.jpg",
+      "source_url": ""
+    },
+    {
+      "key": "coach-lili",
+      "kind": "COACH",
+      "brand": "台球助教",
+      "name": "梨梨",
+      "gender": "女",
+      "star_level": 4,
+      "age": 22,
+      "height_cm": 167,
+      "weight_kg": 50,
+      "personality": "沉静认真 · 注重细节",
+      "specialties": "低杆、高杆与发力练习",
+      "description": "梨梨 · 沉静认真 · 注重细节。根据你的练习目标安排节奏，从热身到对局逐步进入状态。适合预约低杆、高杆与发力练习，可在服务前沟通练习需求。",
+      "rate": 1.5,
+      "stock": 1,
+      "enabled": true,
+      "image_path": "/assets/services/coach-youth-13.jpg",
+      "source_url": ""
+    },
+    {
+      "key": "coach-wanning",
+      "kind": "COACH",
+      "brand": "台球助教",
+      "name": "晚柠",
+      "gender": "女",
+      "star_level": 6,
+      "age": 24,
+      "height_cm": 169,
+      "weight_kg": 51,
+      "personality": "开朗自信 · 互动积极",
+      "specialties": "对局陪练与清台复盘",
+      "description": "晚柠 · 开朗自信 · 互动积极。根据你的练习目标安排节奏，从热身到对局逐步进入状态。适合预约对局陪练与清台复盘，可在服务前沟通练习需求。",
+      "rate": 3,
+      "stock": 1,
+      "enabled": true,
+      "image_path": "/assets/services/coach-youth-14.jpg",
+      "source_url": ""
+    },
+    {
+      "key": "peri-taiji-water",
+      "kind": "CUE",
+      "brand": "皮尔力",
+      "name": "太极·水",
+      "description": "郑肖淮同款 · 太极特别版。品牌官方抖音发布同款介绍，水主题雕刻与太极元素构成辨识度。配图为品牌产品展示。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 38,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/peri-taiji-water.jpg",
+      "source_url": "https://www.douyin.com/video/7612921753853037887"
+    },
+    {
+      "key": "peri-taiji-fire",
+      "kind": "CUE",
+      "brand": "皮尔力",
+      "name": "太极·火",
+      "description": "太极系列热门款 · 与水款形成不同外观风格。配图为太极特别版系列展示，实际版本与前节配置可向前台确认。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 36,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/peri-taiji-fire.jpg",
+      "source_url": "https://pericue.com/Content/3003976.html"
+    },
+    {
+      "key": "lees-emperor-star2",
+      "kind": "CUE",
+      "brand": "李斯 CUELEES",
+      "name": "帝皇星 2",
+      "description": "赵汝亮同款 · 品牌官方球员资料标注使用帝皇星2。深色后把搭配精细镶嵌，细节丰富。配图来自品牌国际产品页。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 48,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/lees-emperor-star2.jpg",
+      "source_url": "https://gb.cue-lees.com/star/2.html"
+    },
+    {
+      "key": "lancome-flow-f5",
+      "kind": "CUE",
+      "brand": "蓝蔻",
+      "name": "心流 F5",
+      "description": "楚秉杰开箱推荐 · 蓝蔻官方店发布心流系列F5开箱。适合希望体验心流系列的球友。配图为对应型号商品展示。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 38,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/lancome-flow-f5.jpg",
+      "source_url": "https://www.douyin.com/shipin/7296439472797976630"
+    },
+    {
+      "key": "cueroc-jiuwanli",
+      "kind": "CUE",
+      "brand": "库洛克 CUEROC",
+      "name": "九万里",
+      "description": "张堃鹏同款 · 品牌赛事内容记录其持九万里参赛。展示图为库洛克系列合照；具体九万里外观、重量和前节配置以前台实物为准。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 36,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/cueroc-jiuwanli.jpg",
+      "source_url": "https://weibo.com/2/detail/5336217015290524"
+    },
+    {
+      "key": "yebao-world",
+      "kind": "CUE",
+      "brand": "野豹",
+      "name": "准神天下",
+      "description": "郑宇伯历史夺冠用杆系列 · 野豹品牌大事记记录2019年世锦赛夺冠用杆。白蜡木前支，145cm。品牌建议零售价 ¥5390，非本店销售报价。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 30,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/yebao-world.jpg",
+      "source_url": "https://yebaocues.com/product.cues-of-superiorityW"
+    },
+    {
+      "key": "yebao-shi5",
+      "kind": "CUE",
+      "brand": "野豹",
+      "name": "石家班 5",
+      "description": "石家班系列高阶款 · 白蜡木前支、乌木后把，145cm，官网标注重量500—530g。品牌建议零售价 ¥17500，非本店销售报价。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 42,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/yebao-shi5.jpg",
+      "source_url": "https://www.yebaocues.com/product.cues-of-s5"
+    },
+    {
+      "key": "lp-tianzun2",
+      "kind": "CUE",
+      "brand": "LP",
+      "name": "天尊 II",
+      "description": "LP 天尊系列 · 深色杆身搭配镶嵌细节，2025系列产品图。可先确认握持手感与前节配置，再安排练习时长。\n租赁按小时预约，租金以前台设置为准；领取与归还请交前台验收。",
+      "rate": 32,
+      "stock": 2,
+      "enabled": true,
+      "image_path": "/assets/services/lp-tianzun2.jpg",
+      "source_url": "https://www.lpcues.com/products/3342.html"
+    }
+  ]
+}

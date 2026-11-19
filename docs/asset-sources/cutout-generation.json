@@ -1,0 +1,36 @@
+{
+  "mode": "built-in image_gen",
+  "prompt": "Extract or redraw one complete photorealistic table from the supplied product reference; transparent background; remove all typography, logos, prices, posters and props; center entire table with realistic proportions. Rose gold is an illustrative generated variant.",
+  "assets": [
+    {
+      "key": "joy-gold",
+      "source": "C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-2bb5eeb7-4eeb-4f75-90f7-431cb147b287.png",
+      "note": "AI重绘/生成球桌示意图，无海报文字"
+    },
+    {
+      "key": "joy-rose",
+      "source": "C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-592b5123-dfef-4857-bc9c-fe1dbe854f79.png",
+      "note": "AI重绘/生成球桌示意图，无海报文字"
+    },
+    {
+      "key": "kangxi-kx08",
+      "source": "C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-f84e992a-0ac6-495a-8ffc-365ffc654892.png",
+      "note": "AI重绘/生成球桌示意图，无海报文字"
+    },
+    {
+      "key": "kangxi-blaze",
+      "source": "C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-6d253500-8356-4c30-a497-4766ea75db57.png",
+      "note": "AI重绘/生成球桌示意图，无海报文字"
+    },
+    {
+      "key": "star-nine",
+      "source": "C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-36453090-7c6f-4ac4-aa6c-9ff470b94822.png",
+      "note": "AI重绘/生成球桌示意图，无海报文字"
+    },
+    {
+      "key": "star-s101",
+      "source": "C:\\Users\\tsouk\\.codex\\generated_images\\01a182f6-d6ff-7601-b839-e48e6890d515\\exec-0f12d139-8f2d-4889-8c5a-816f66563943.png",
+      "note": "AI重绘/生成球桌示意图，无海报文字"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+<view
+  wx:if="{{prompt}}"
+  style="{{themeStyle}}"
+  class="app-themed club-prompt-overlay theme-{{skinKey}}"
+>
+  <view class="club-prompt-card" role="dialog" aria-modal="true">
+    <view class="club-prompt-icon">i</view>
+    <view class="club-prompt-title">{{prompt.title}}</view>
+    <scroll-view scroll-y class="club-prompt-scroll">
+      <view wx:for="{{prompt.paragraphs}}" wx:key="index" class="club-prompt-paragraph">{{item}}</view>
+    </scroll-view>
+    <view class="club-prompt-actions">
+      <button class="club-prompt-confirm" bindtap="resolvePrompt" data-accept="yes">{{prompt.confirmText}}</button>
+      <button
+        wx:if="{{prompt.showCancel}}"
+        class="club-prompt-cancel"
+        bindtap="resolvePrompt"
+        data-accept="no"
+      >{{prompt.cancelText}}</button>
+    </view>
+  </view>
+</view>

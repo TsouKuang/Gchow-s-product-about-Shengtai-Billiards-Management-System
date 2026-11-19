@@ -1,0 +1,81 @@
+<view
+  wx:if="{{bookingSheet}}"
+  style="{{themeStyle}}"
+  class="app-themed service-booking-overlay theme-{{skinKey}}"
+>
+  <view class="service-booking-backdrop" bindtap="closeBookingSheet"></view>
+  <view class="service-booking-sheet" catchtap="stopBookingBubble">
+    <view class="booking-grip"></view>
+    <view class="booking-sheet-heading">
+      <view>
+        <view class="booking-eyebrow">SHENGTAI · CLUB SERVICE</view>
+        <view class="booking-title">{{bookingSheet.item.kind==='COACH'?'预约台球助教':'挑选球杆时光'}}</view>
+      </view>
+      <button class="booking-close" bindtap="closeBookingSheet" aria-label="关闭预约">×</button>
+    </view>
+    <view class="booking-item-card">
+      <image
+        class="booking-item-photo {{bookingSheet.item.kind==='COACH'?'is-coach':'is-cue'}}"
+        src="{{bookingSheet.item.imageSrc || bookingSheet.item.image_path}}"
+        mode="{{bookingSheet.item.kind==='COACH'?'aspectFill':'aspectFit'}}"
+      />
+      <view class="booking-item-copy">
+        <view class="booking-category">{{bookingSheet.item.kind==='COACH'?(bookingSheet.item.star_level+' 星助教'):bookingSheet.item.brand}}</view>
+        <view class="booking-item-name">{{bookingSheet.item.name}}</view>
+        <view class="booking-unit-price">¥{{bookingSheet.unitText}}<text> / 小时</text></view>
+      </view>
+      <view class="booking-item-seal">圣泰<view>精选</view></view>
+    </view>
+    <view class="booking-section-heading">
+      <text>服务球桌</text>
+      <text class="booking-section-note">关联本次使用记录</text>
+    </view>
+    <view class="booking-table-options">
+      <view
+        wx:for="{{bookingSheet.plays}}"
+        wx:key="id"
+        class="booking-table-chip {{bookingSheet.playId===item.id?'is-selected':''}}"
+        data-id="{{item.id}}"
+        bindtap="chooseBookingPlay"
+      ><text class="booking-table-dot"></text>{{item.table_no}}<text class="booking-table-caption">使用中</text></view>
+    </view>
+    <view class="booking-section-heading">
+      <text>选择服务时长</text>
+      <text class="booking-section-note">按小时预约</text>
+    </view>
+    <view class="booking-duration-grid">
+      <view
+        wx:for="{{bookingSheet.options}}"
+        wx:key="hours"
+        class="booking-duration-option {{bookingSheet.hours===item.hours?'is-selected':''}}"
+        data-hours="{{item.hours}}"
+        bindtap="chooseBookingHours"
+      >
+        <view class="booking-hours">{{item.hours}}<text> 小时</text></view>
+        <view class="booking-option-price">¥{{item.amount}}</view>
+        <view wx:if="{{bookingSheet.hours===item.hours}}" class="booking-option-check">✓</view>
+      </view>
+    </view>
+    <view class="booking-custom-duration">
+      <text>自选时长</text>
+      <view class="booking-stepper">
+        <button
+          data-step="-1"
+          bindtap="stepBookingHours"
+          disabled="{{bookingSheet.hours<=1 || busy}}"
+        >−</button>
+        <view>{{bookingSheet.hours}}<text> 小时</text></view>
+        <button
+          data-step="1"
+          bindtap="stepBookingHours"
+          disabled="{{bookingSheet.hours>=12 || busy}}"
+        >＋</button>
+      </view>
+    </view>
+    <view wx:if="{{error}}" class="booking-error">{{error}}</view>
+    <view class="booking-checkout">
+      <view class="booking-total"><view>本次应付</view><text>¥</text>{{bookingSheet.total}}</view>
+      <button class="booking-confirm" bindtap="confirmServiceBooking" disabled="{{busy}}">{{'确认登记并支付'}}<text>→</text></button>
+    </view>
+  </view>
+</view>

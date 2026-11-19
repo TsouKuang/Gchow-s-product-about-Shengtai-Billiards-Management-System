@@ -1,0 +1,624 @@
+.app-themed {
+  font-family: var(--ui-font);
+  color: var(--ui-text);
+}
+.app-themed.screen,
+.app-themed.screen.wallet-console,
+.app-themed.screen.skin-gallery {
+  background: var(--ui-bg);
+  background-image: none;
+  color: var(--ui-text);
+  min-height: 100vh;
+}
+.app-themed button {
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+  box-shadow: none;
+}
+.app-themed button[disabled] {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+  box-shadow: none;
+}
+.app-themed .table-card,
+.app-themed .selected-table,
+.app-themed .package,
+.app-themed .quick-scan,
+.app-themed .coach-tile,
+.app-themed .cue-tile,
+.app-themed .order-card,
+.app-themed .session-bill,
+.app-themed .bill-service,
+.app-themed .bill-summary,
+.app-themed .bill-empty,
+.app-themed .service-record-entry,
+.app-themed .profile-head,
+.app-themed .profile-stats,
+.app-themed .menu,
+.app-themed .member-rank,
+.app-themed .rank-summary,
+.app-themed .rank-detail-row,
+.app-themed .player-profile-editor,
+.app-themed .profile-settings-hero,
+.app-themed .board-list,
+.app-themed .board-my-standing,
+.app-themed .auth-form-card,
+.app-themed .profile-facts,
+.app-themed .detail-section,
+.app-themed .skin-picker {
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border: 1rpx solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+  backdrop-filter: none;
+}
+.app-themed .coach-tile-body,
+.app-themed .coach-tile-footer,
+.app-themed .cue-tile-body,
+.app-themed .cue-tile-footer {
+  background: transparent;
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+}
+.app-themed .page-title,
+.app-themed .section-title,
+.app-themed .table-number,
+.app-themed .model-name,
+.app-themed .package-name,
+.app-themed .profile-name,
+.app-themed .coach-name,
+.app-themed .cue-name,
+.app-themed .service-detail-title,
+.app-themed .detail-section-title,
+.app-themed .settings-name,
+.app-themed .settings-form-title,
+.app-themed .rank-progress-label,
+.app-themed .member-rank-caption,
+.app-themed .board-title,
+.app-themed .champion-name,
+.app-themed .board-player-info > view,
+.app-themed .skin-picker-heading,
+.app-themed .exclusive-option-title {
+  color: var(--ui-text);
+  text-shadow: none;
+}
+.app-themed .subtle,
+.app-themed .section-note,
+.app-themed .section-eyebrow,
+.app-themed .quick-copy > text,
+.app-themed .table-bottom,
+.app-themed .result-bar,
+.app-themed .service-brand,
+.app-themed .service-results,
+.app-themed .service-results text,
+.app-themed .coach-personality,
+.app-themed .coach-measurements,
+.app-themed .coach-gender,
+.app-themed .service-subtitle,
+.app-themed .tile-unit,
+.app-themed .order-date,
+.app-themed .session-order-paid,
+.app-themed .bill-package-name,
+.app-themed .bill-quiet,
+.app-themed .bill-service-meta,
+.app-themed .bill-service-amount > text,
+.app-themed .profile-detail-id,
+.app-themed .settings-eyebrow,
+.app-themed .menu-subtitle,
+.app-themed .profile-stats view view,
+.app-themed .footnote,
+.app-themed .board-kicker,
+.app-themed .board-description,
+.app-themed .board-list-heading,
+.app-themed .board-player-info > text,
+.app-themed .board-my-standing > view > text,
+.app-themed .board-footnote,
+.app-themed .exclusive-description,
+.app-themed .exclusive-heading > text {
+  color: var(--ui-muted);
+  opacity: 1;
+}
+.app-themed .price,
+.app-themed .tile-price,
+.app-themed .detail-price,
+.app-themed .session-order-total,
+.app-themed .session-order-link,
+.app-themed .bill-grand-total,
+.app-themed .bill-service-amount,
+.app-themed .bill-state,
+.app-themed .rank-summary-amount,
+.app-themed .board-player-time,
+.app-themed .board-my-standing,
+.app-themed .board-rank,
+.app-themed .exclusive-unlock {
+  color: var(--ui-accent);
+}
+.app-themed .table-bottom,
+.app-themed .order-footer,
+.app-themed .record-actions,
+.app-themed .receipt-line,
+.app-themed .menu-item,
+.app-themed .board-player,
+.app-themed .board-list-heading,
+.app-themed .settings-form .player-fields > view {
+  border-color: var(--ui-line);
+}
+.app-themed .profile-menu-refined .menu-item:last-child {
+  border-bottom: 0;
+}
+.app-themed .menu-trailing {
+  color: var(--ui-muted);
+  opacity: 1;
+}
+.app-themed .member-rank-heading > view > text {
+  color: var(--ui-muted);
+}
+.app-themed .product-visual,
+.app-themed .cue-picture {
+  background: transparent;
+  box-shadow: none;
+}
+.app-themed .product-photo {
+  filter: none;
+}
+.app-themed .photo-pending {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+}
+.app-themed .filters,
+.app-themed .service-segments,
+.app-themed .board-period-tabs,
+.app-themed .skin-category-tabs {
+  background: var(--ui-raised);
+  border: 1rpx solid var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .filter,
+.app-themed .service-segments > view,
+.app-themed .board-period-tabs > view,
+.app-themed .skin-category-tabs button {
+  background: transparent;
+  color: var(--ui-muted);
+  border-color: transparent;
+  box-shadow: none;
+}
+.app-themed .filters .filter.on,
+.app-themed .service-segments .segment-active,
+.app-themed .board-period-tabs .board-period-active,
+.app-themed .skin-category-tabs button.is-active {
+  background: var(--ui-surface);
+  color: var(--ui-accent);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .brand-chip,
+.app-themed .coach-filter,
+.app-themed .grade-filter,
+.app-themed .player-genders text {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+  border-color: var(--ui-line);
+}
+.app-themed .selected-brand,
+.app-themed .coach-filter-on,
+.app-themed .grade-filter-on,
+.app-themed .player-genders .picked {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+  border-color: var(--ui-accent);
+}
+.app-themed .package.chosen {
+  background: var(--ui-soft);
+  border-color: var(--ui-accent);
+}
+.app-themed .radio {
+  border-color: var(--ui-muted);
+}
+.app-themed .chosen .radio {
+  background: var(--ui-accent);
+  border-color: var(--ui-accent);
+  color: var(--ui-on-accent);
+}
+.app-themed .outline,
+.app-themed .back,
+.app-themed .profile-back-button,
+.app-themed .profile-head .profile-chevron,
+.app-themed .member-rank .rank-chevron,
+.app-themed .menu-symbol,
+.app-themed .table-link,
+.app-themed .board-avatar,
+.app-themed .avatar,
+.app-themed .bill-refresh,
+.app-themed .history-tool-button {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .profile-id {
+  background: var(--ui-raised);
+  color: var(--ui-accent);
+}
+.app-themed .wallet-glyph:after {
+  background: var(--ui-soft);
+}
+.app-themed .paybar {
+  background: var(--ui-surface);
+  border: 1rpx solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+}
+.app-themed .paybar button,
+.app-themed .detail-booking-bar button,
+.app-themed .record-actions .record-button,
+.app-themed .finish-session-button,
+.app-themed .settle-session-button,
+.app-themed button.settings-save {
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+  box-shadow: none;
+}
+.app-themed .record-actions .secondary-record {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+}
+.app-themed .dock {
+  background: var(--ui-surface);
+  border-color: var(--ui-line);
+  border-radius: 28rpx;
+  box-shadow: var(--ui-shadow);
+}
+.app-themed .dock .nav-item {
+  color: var(--ui-muted);
+}
+.app-themed .dock .nav-active {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+  border: 0;
+  box-shadow: none;
+}
+.app-themed .hero.editorial,
+.app-themed .ongoing,
+.app-themed .active-mini,
+.app-themed .board-champion {
+  background: linear-gradient(135deg, var(--ui-hero-from), var(--ui-hero-to));
+  color: var(--ui-hero-text);
+  border: 1rpx solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+}
+.app-themed .hero.editorial .hero-title,
+.app-themed .hero-eyebrow,
+.app-themed .hero-bottom,
+.app-themed .big-timer,
+.app-themed .champion-name,
+.app-themed .champion-duration > view {
+  color: var(--ui-hero-text);
+}
+.app-themed .emblem-ball {
+  background: var(--ui-hero-from);
+  color: var(--ui-hero-text);
+  border-color: var(--ui-hero-track);
+  box-shadow: 0 0 0 20rpx #ffffff03;
+}
+.app-themed .ongoing-label,
+.app-themed .remaining,
+.app-themed .ongoing-bottom,
+.app-themed .active-service-summary,
+.app-themed .board-champion-top,
+.app-themed .champion-id,
+.app-themed .champion-duration > text {
+  color: var(--ui-hero-muted);
+  opacity: 1;
+}
+.app-themed .champion-avatar {
+  background: var(--ui-hero-from);
+  color: var(--ui-hero-text);
+  border-color: var(--ui-hero-track);
+}
+.app-themed .champion-duration {
+  border-color: var(--ui-hero-track);
+}
+.app-themed .board-player-me {
+  background: var(--ui-soft);
+  border-radius: 16rpx;
+  padding-left: 12rpx;
+  padding-right: 12rpx;
+}
+.app-themed .board-player-info > view > text {
+  border-color: var(--ui-accent);
+  color: var(--ui-accent);
+}
+.app-themed .service-banner {
+  background: transparent;
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+}
+.app-themed .service-banner > text {
+  color: var(--ui-muted);
+}
+.app-themed .scan-icon,
+.app-themed .scan-symbol {
+  color: var(--ui-accent);
+  background-color: var(--ui-soft);
+  border-color: var(--ui-accent);
+}
+.app-themed .quick-copy > view {
+  color: var(--ui-text);
+}
+.app-themed .quick-scan .arrow {
+  color: var(--ui-muted);
+}
+.app-themed .home-service-shortcuts > view,
+.app-themed .session-service-list {
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+}
+.app-themed .availability-open {
+  background: var(--ui-success-soft);
+  color: var(--ui-success);
+  border-color: var(--ui-success);
+}
+.app-themed .availability-busy,
+.app-themed .return-alert {
+  background: var(--ui-danger-soft);
+  color: var(--ui-danger);
+  border-color: var(--ui-line);
+}
+.app-themed .skin-picker {
+  padding: 24rpx;
+}
+.app-themed .skin-picker button,
+.app-themed button.exclusive-option {
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border: 1rpx solid var(--ui-line);
+}
+.app-themed .skin-picker .skin-selected,
+.app-themed button.exclusive-option.is-selected {
+  border-color: var(--ui-accent);
+  box-shadow: inset 0 0 0 1rpx var(--ui-accent);
+}
+.app-themed .skin-picker .skin-auto,
+.app-themed button.exclusive-default {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+  border-color: var(--ui-line);
+}
+.app-themed .skin-picker .skin-category-tabs button {
+  background: transparent;
+  color: var(--ui-muted);
+  border-color: transparent;
+}
+.app-themed .skin-picker .skin-category-tabs button.is-active {
+  background: var(--ui-surface);
+  color: var(--ui-accent);
+  border-color: var(--ui-line);
+}
+.app-themed .skin-picker .skin-option.skin-locked {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+}
+.app-themed .skin-option-name,
+.app-themed .exclusive-heading {
+  color: var(--ui-text);
+}
+.app-themed button.exclusive-option.is-locked {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+  opacity: 1;
+}
+.app-themed .skin-unlock {
+  color: var(--ui-muted);
+}
+.app-themed .club-prompt-card,
+.app-themed .wallet-checkout-sheet,
+.app-themed .payment-sheet,
+.app-themed .service-booking-sheet,
+.app-themed .paid-card,
+.app-themed .wt-sheet {
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+  box-shadow: var(--ui-shadow);
+}
+.app-themed.club-prompt-overlay,
+.app-themed .wallet-backdrop,
+.app-themed .payment-backdrop,
+.app-themed .service-booking-backdrop {
+  background: var(--ui-overlay);
+}
+.app-themed .club-prompt-icon,
+.app-themed .scan-merchant-seal {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .club-prompt-title,
+.app-themed .club-prompt-paragraph:first-child,
+.app-themed .wallet-sheet-heading,
+.app-themed .booking-title,
+.app-themed .booking-item-name,
+.app-themed .booking-section-heading,
+.app-themed .scan-merchant {
+  color: var(--ui-text);
+}
+.app-themed .club-prompt-paragraph,
+.app-themed .wallet-checkout-title,
+.app-themed .wallet-choice > view > text,
+.app-themed .scan-merchant text,
+.app-themed .scan-recognition-state,
+.app-themed .scan-processing-center,
+.app-themed .booking-category,
+.app-themed .booking-section-note,
+.app-themed .booking-table-caption,
+.app-themed .booking-unit-price > text,
+.app-themed .booking-option-price,
+.app-themed .booking-custom-duration {
+  color: var(--ui-muted);
+}
+.app-themed .club-prompt-actions {
+  border-color: var(--ui-line);
+}
+.app-themed .club-prompt-actions .club-prompt-confirm {
+  background: var(--ui-accent) !important;
+  color: var(--ui-on-accent) !important;
+}
+.app-themed .club-prompt-actions .club-prompt-cancel {
+  background: var(--ui-raised) !important;
+  color: var(--ui-text) !important;
+}
+.app-themed .wallet-choice,
+.app-themed .booking-item-card,
+.app-themed .booking-duration-option,
+.app-themed .booking-table-chip {
+  background: var(--ui-raised);
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .wallet-choice.is-picked,
+.app-themed .booking-duration-option.is-selected,
+.app-themed .booking-table-chip.is-selected {
+  background: var(--ui-soft);
+  border-color: var(--ui-accent);
+  box-shadow: inset 0 0 0 1rpx var(--ui-accent);
+}
+.app-themed .wallet-channel-icon,
+.app-themed .scan-channel {
+  background: var(--ui-soft);
+  color: var(--ui-accent);
+  border-color: var(--ui-line);
+}
+.app-themed .wallet-checkout-amount,
+.app-themed .wallet-choice > text,
+.app-themed .booking-unit-price,
+.app-themed .booking-hours,
+.app-themed .booking-total,
+.app-themed .booking-stepper > view {
+  color: var(--ui-accent);
+}
+.app-themed .wallet-checkout-sheet button.wallet-primary,
+.app-themed .booking-checkout button.booking-confirm,
+.app-themed .booking-option-check,
+.app-themed .paid-card button {
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+}
+.app-themed .wallet-sheet-heading button,
+.app-themed .booking-stepper button,
+.app-themed .service-booking-sheet button.booking-close {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .booking-checkout {
+  border-color: var(--ui-line);
+}
+.app-themed .wallet-pin-dots > view {
+  background: var(--ui-raised);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .wallet-pin-dots .pin-slot-filled {
+  border-color: var(--ui-accent);
+}
+.app-themed .wallet-pin-dot,
+.app-themed .scan-status-dot {
+  background: var(--ui-accent);
+}
+.app-themed .wallet-pin-message {
+  color: var(--ui-success);
+}
+.app-themed .wallet-error,
+.app-themed .wallet-pin-message.is-error {
+  color: var(--ui-danger);
+}
+.app-themed .wallet-keypad {
+  border-color: var(--ui-line);
+  background: transparent;
+}
+.app-themed .wallet-keypad button,
+.app-themed .wallet-keypad button.delete-key {
+  background: var(--ui-raised);
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+  box-shadow: none;
+}
+.app-themed .wallet-keypad button.delete-key {
+  color: var(--ui-muted);
+}
+.app-themed .wallet-keypad button:active {
+  background: var(--ui-soft);
+}
+.app-themed .wallet-keypad button[disabled] {
+  background: var(--ui-raised);
+  color: var(--ui-muted);
+}
+.app-themed .wallet-keypad button[disabled]:nth-child(10) {
+  background: transparent;
+  color: transparent;
+  border-color: transparent;
+}
+.app-themed .payment-spinner,
+.app-themed .paid-wait {
+  border-color: var(--ui-line);
+  border-top-color: var(--ui-accent);
+}
+.app-themed .paid-ring,
+.app-themed .paid-check {
+  border-color: var(--ui-accent);
+}
+.app-themed .payment-skin-label {
+  color: var(--ui-muted);
+}
+.app-themed.wallet-console .wt-balance-card {
+  box-shadow: var(--ui-shadow);
+}
+.app-themed .wt-card-orbit {
+  border-color: var(--ui-line);
+  box-shadow:
+    0 0 0 32rpx #ffffff02,
+    0 0 0 64rpx #ffffff01;
+}
+.app-themed .wt-secure-dot {
+  box-shadow: none;
+}
+.app-themed .wt-sheet-header button {
+  box-shadow: none;
+}
+.app-themed .wt-topup-options button.is-active,
+.app-themed .wt-channel-options button.is-active {
+  border-color: var(--ui-accent);
+}
+.app-themed .wt-amount-input input,
+.app-themed .wt-password-input {
+  color: var(--ui-text);
+}
+.app-themed .wt-placeholder {
+  color: var(--ui-muted);
+}
+.app-themed .wt-channel-radio {
+  border-color: var(--ui-muted);
+}
+.app-themed .is-active .wt-channel-radio {
+  border-color: var(--ui-accent);
+  background: var(--ui-surface);
+}
+.app-themed .settings-form input,
+.app-themed .auth-field {
+  background: var(--ui-raised);
+  color: var(--ui-text);
+  border-color: var(--ui-line);
+}
+.app-themed .auth-field input {
+  color: var(--ui-text);
+}
+.app-themed .auth-submit {
+  background: var(--ui-accent) !important;
+  color: var(--ui-on-accent) !important;
+}

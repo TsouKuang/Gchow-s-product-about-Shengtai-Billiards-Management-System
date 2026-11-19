@@ -1,0 +1,277 @@
+<view
+  wx:if="{{checkout && !scanStage && !pinSheet}}"
+  style="{{themeStyle}}"
+  class="app-themed wallet-overlay theme-{{skinKey}}"
+>
+  <view class="wallet-backdrop" bindtap="closeCheckout"></view>
+  <view class="wallet-checkout-sheet checkout-method-sheet">
+    <view class="wallet-sheet-heading">
+      <text>确认付款</text>
+      <button bindtap="closeCheckout">×</button>
+    </view>
+    <view class="wallet-checkout-title">{{checkout.title}}</view>
+    <view class="wallet-checkout-amount">¥{{checkout.amount}}</view>
+    <view
+      class="wallet-choice {{checkoutMethod==='WALLET'?'is-picked':''}}"
+      data-value="WALLET"
+      bindtap="chooseCheckoutMethod"
+    >
+      <view class="wallet-channel-icon">
+        <view class="wallet-glyph"></view>
+      </view>
+      <view>
+        <view>圣泰钱包</view>
+        <text>余额 {{walletHidden?'••••':'¥'+walletBalance}} · 支付密码验证</text>
+      </view>
+      <text>{{checkoutMethod==='WALLET'?'●':'○'}}</text>
+    </view>
+    <view
+      class="wallet-choice {{checkoutMethod==='SCAN'?'is-picked':''}}"
+      data-value="SCAN"
+      bindtap="chooseCheckoutMethod"
+    >
+      <view class="wallet-channel-icon">
+        <image class="channel-qr-image" src="/assets/qr-icon.svg" mode="aspectFit" />
+      </view>
+      <view>扫码支付 <text class="scan-channel">微信 / 支付宝</text></view>
+      <text>{{checkoutMethod==='SCAN'?'●':'○'}}</text>
+    </view>
+    <view wx:if="{{walletError}}" class="wallet-error">{{walletError}}</view>
+    <button class="wallet-primary" bindtap="confirmCheckout" disabled="{{busy}}">支付</button>
+  </view>
+</view>
+<view
+  wx:if="{{topupVisible}}"
+  style="{{themeStyle}}"
+  class="app-themed wallet-overlay wallet-tech-overlay"
+>
+  <view class="wallet-backdrop" bindtap="closeTopup"></view>
+  <view class="wt-sheet">
+    <view class="wt-sheet-header">
+      <view>{{topupStage==='success'?'充值成功':topupStage==='processing'?'充值中':'钱包充值'}}</view>
+      <button wx:if="{{!busy}}" bindtap="closeTopup" aria-label="关闭">×</button>
+    </view>
+    <view wx:if="{{topupStage==='form'}}" class="wt-sheet-body">
+      <view class="wt-amount-heading">
+        <view class="wt-sheet-label">充值金额</view>
+        <button class="{{topupCustom?'is-active':''}}" bindtap="chooseCustomTopup">自定义金额</button>
+      </view>
+      <view class="wt-topup-options">
+        <button
+          wx:for="{{topupOptions}}"
+          wx:key="*this"
+          data-amount="{{item}}"
+          class="{{!topupCustom && topupAmount==item?'is-active':''}}"
+          bindtap="chooseTopupAmount"
+        >¥{{item}}</button>
+      </view>
+      <view class="wt-amount-input">
+        <text>¥</text>
+        <input
+          type="digit"
+          maxlength="7"
+          placeholder="输入自定义金额"
+          placeholder-class="wt-placeholder"
+          focus="{{topupCustom}}"
+          value="{{topupAmount}}"
+          bindinput="inputTopupAmount"
+        />
+      </view>
+      <view class="wt-small-note">单次 ¥1—¥5,000，可精确到分</view>
+      <view class="wt-sheet-label wt-channel-label">充值方式</view>
+      <view class="wt-channel-options">
+        <button
+          class="{{topupChannel==='WECHAT'?'is-active':''}}"
+          data-channel="WECHAT"
+          bindtap="chooseTopupChannel"
+        >
+          <view class="wt-wechat-icon"></view>
+          <text>微信充值</text>
+          <view class="wt-channel-radio"></view>
+        </button>
+        <button
+          class="{{topupChannel==='ALIPAY'?'is-active':''}}"
+          data-channel="ALIPAY"
+          bindtap="chooseTopupChannel"
+        >
+          <view class="wt-alipay-icon">支</view>
+          <text>支付宝充值</text>
+          <view class="wt-channel-radio"></view>
+        </button>
+      </view>
+      <view class="wt-topup-mode">
+        <view class="wt-qr-icon"></view>
+        <view>
+          <view>{{wallet.topupEnabled?'体验充值':'到店充值'}}</view>
+          <text>{{wallet.topupEnabled?'体验余额用于本系统演示':'请到门店前台核对充值到账'}}</text>
+        </view>
+      </view>
+      <view wx:if="{{walletError}}" class="wt-error" role="alert">{{walletError}}</view>
+      <button
+        class="wt-primary wt-bottom-action"
+        bindtap="reviewTopup"
+        disabled="{{busy || !wallet.topupEnabled}}"
+      >下一步</button>
+    </view>
+    <view wx:elif="{{topupStage==='review'}}" class="wt-sheet-body">
+      <view class="wt-topup-review">
+        <text>充值至圣泰钱包</text>
+        <view>¥{{topupQuote}}</view>
+      </view>
+      <view class="wt-detail-row">
+        <text>入账账户</text>
+        <text>{{customerCode}}</text>
+      </view>
+      <view class="wt-detail-row">
+        <text>充值方式</text>
+        <text>{{topupChannelText}} · 体验充值</text>
+      </view>
+      <view class="wt-small-note wt-review-note">确认后计入体验余额，可用于系统内开台和预约服务。</view>
+      <view wx:if="{{walletError}}" class="wt-error" role="alert">{{walletError}}</view>
+      <view class="wt-paired-actions wt-bottom-action">
+        <button class="wt-primary" bindtap="confirmTopup" disabled="{{busy}}">确认充值</button>
+        <button class="wt-secondary" bindtap="editTopup" disabled="{{busy}}">返回修改</button>
+      </view>
+    </view>
+    <view wx:else class="wt-sheet-body wt-result-body">
+      <view wx:if="{{topupStage==='processing'}}" class="wt-spinner"></view>
+      <view wx:else class="wt-result-check">✓</view>
+      <view class="wt-result-title">{{topupStage==='processing'?'正在同步余额':'充值已到账'}}</view>
+      <view class="wt-result-amount">¥{{topupQuote}}</view>
+      <text wx:if="{{topupStage==='success'}}" class="wt-result-balance">当前余额 {{walletHidden?'••••':'¥'+walletBalance}}</text>
+      <button
+        wx:if="{{topupStage==='success'}}"
+        class="wt-primary wt-bottom-action"
+        bindtap="closeTopup"
+      >完成</button>
+    </view>
+  </view>
+</view>
+<view
+  wx:if="{{walletSecurityPage}}"
+  style="{{themeStyle}}"
+  class="app-themed wallet-overlay wallet-tech-overlay"
+>
+  <view class="wallet-backdrop" bindtap="closeWalletSecurity"></view>
+  <view class="wt-sheet">
+    <view class="wt-sheet-header">
+      <view>{{walletSecurityPage==='recover'?'找回支付密码':'支付安全'}}</view>
+      <button bindtap="closeWalletSecurity" disabled="{{busy}}" aria-label="关闭">×</button>
+    </view>
+    <view wx:if="{{walletSecurityPage==='menu'}}" class="wt-sheet-body">
+      <view class="wt-security-status">
+        <view class="wt-lock"></view>
+        <view>{{wallet.pinSet?'已设置支付密码':'为钱包设置一道保护'}}<text>{{wallet.pinSet?'六位数字，用于验证本店钱包付款':'每次钱包付款时验证支付密码'}}</text></view>
+      </view>
+      <button wx:if="{{!wallet.pinSet}}" class="wt-security-row" bindtap="openWalletPin">
+        <view>设置支付密码<text>设置并确认六位数字</text></view>
+        <text>›</text>
+      </button>
+      <button wx:else class="wt-security-row" bindtap="startWalletPinChange">
+        <view>修改支付密码<text>验证原支付密码后修改</text></view>
+        <text>›</text>
+      </button>
+      <button wx:if="{{wallet.pinSet}}" class="wt-security-row" bindtap="startWalletRecovery">
+        <view>忘记支付密码<text>使用账号登录密码验证身份</text></view>
+        <text>›</text>
+      </button>
+      <view class="wt-small-note wt-bottom-action">支付密码连续输错3次将锁定15分钟。请妥善保管账号和密码。</view>
+    </view>
+    <view wx:else class="wt-sheet-body">
+      <view class="wt-recovery-heading">先确认是你本人</view>
+      <view class="wt-small-note">验证账号登录密码后，可重新设置支付密码。</view>
+      <block wx:if="{{wallet.recoverySupported}}">
+        <label class="wt-input-label">账号登录密码</label>
+        <input
+          class="wt-password-input"
+          password
+          maxlength="72"
+          value="{{walletLoginPassword}}"
+          bindinput="walletResetPassword"
+          placeholder="输入登录密码"
+          placeholder-class="wt-placeholder"
+          disabled="{{busy}}"
+        />
+        <view wx:if="{{walletError}}" class="wt-error" role="alert">{{walletError}}</view>
+        <button
+          class="wt-primary wt-bottom-action"
+          bindtap="verifyWalletIdentity"
+          disabled="{{busy || wallet.recoveryLocked}}"
+          loading="{{busy}}"
+        >{{wallet.recoveryLocked?'请稍后重试':'验证身份'}}</button>
+      </block>
+      <view wx:else class="wt-recovery-support">该账号使用微信或体验身份，请携带账号编号 {{customerCode}} 到前台核验身份。</view>
+    </view>
+  </view>
+</view>
+<view
+  wx:if="{{walletRecord}}"
+  style="{{themeStyle}}"
+  class="app-themed wallet-overlay wallet-tech-overlay"
+>
+  <view class="wallet-backdrop" bindtap="closeWalletRecord"></view>
+  <view class="wt-sheet">
+    <view class="wt-sheet-header">
+      <view>交易详情</view>
+      <button bindtap="closeWalletRecord" aria-label="关闭">×</button>
+    </view>
+    <view class="wt-sheet-body">
+      <view class="wt-topup-review">
+        <text>{{walletRecord.title}}</text>
+        <view>{{walletRecord.amountText}}</view>
+      </view>
+      <view class="wt-detail-row">
+        <text>交易状态</text>
+        <text>已完成</text>
+      </view>
+      <view class="wt-detail-row">
+        <text>交易时间</text>
+        <text>{{walletRecord.dateText}}</text>
+      </view>
+      <view class="wt-detail-row">
+        <text>交易方式</text>
+        <text>{{walletRecord.channelText}}</text>
+      </view>
+      <view class="wt-detail-row">
+        <text>交易后余额</text>
+        <text>{{walletHidden?'••••':'¥'+walletRecord.balanceText}}</text>
+      </view>
+      <view class="wt-detail-row">
+        <text>流水编号</text>
+        <text>{{walletRecord.id}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view
+  wx:if="{{pinSheet && pinSheet.mode!=='scan' && pinSheet.mode!=='pay'}}"
+  style="{{themeStyle}}"
+  class="app-themed wallet-pin-overlay wallet-tech-overlay"
+>
+  <view class="wallet-backdrop" bindtap="closePin"></view>
+  <view class="wt-sheet">
+    <view class="wt-sheet-header">
+      <view>{{pinSheet.title}}</view>
+      <button bindtap="closePin" disabled="{{busy}}" aria-label="关闭">×</button>
+    </view>
+    <view class="wt-sheet-body wt-pin-body">
+      <view class="wt-pin-caption">{{pinSheet.caption}}</view>
+      <view class="wallet-pin-dots">
+        <view wx:for="{{pinDots}}" wx:key="*this" class="{{pinLength>item?'pin-slot-filled':''}}">
+          <view wx:if="{{pinLength>item}}" class="wallet-pin-dot"></view>
+        </view>
+      </view>
+      <view class="wt-pin-message {{walletError?'is-error':''}}" role="status">{{busy?'正在验证…':walletError||'输入完成后自动继续'}}</view>
+      <view class="wallet-keypad">
+        <button
+          wx:for="{{pinKeys}}"
+          wx:key="*this"
+          data-key="{{item}}"
+          bindtap="pressPinKey"
+          disabled="{{busy || !item}}"
+          class="{{item==='delete'?'delete-key':''}}"
+        >{{item==='delete'?'⌫':item}}</button>
+      </view>
+    </view>
+  </view>
+</view>

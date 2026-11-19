@@ -1,0 +1,1105 @@
+<view
+  style="{{themeStyle}}"
+  class="app-themed screen theme-{{skinKey}} exclusive-{{exclusiveSkinKey}} {{exclusiveSkinKey!=='none'?'exclusive-active':''}} {{profilePage==='wallet'?'wallet-console':''}} {{profilePage==='skins'?'skin-gallery':''}}"
+>
+  <view class="content">
+    <view class="alert" wx:if="{{error}}">
+      <text>{{error}}</text>
+      <text class="retry" bindtap="refresh">重试</text>
+    </view>
+    <block wx:if="{{serviceSelected}}">
+      <view class="back" bindtap="back">‹ 返回服务</view>
+      <view
+        class="service-detail-hero {{serviceSelected.kind==='COACH'?'portrait-hero':'cue-hero'}}"
+      >
+        <image
+          src="{{serviceSelected.imageSrc}}"
+          mode="{{serviceSelected.kind==='COACH'?'aspectFill':'aspectFit'}}"
+        />
+        <view wx:if="{{serviceSelected.kind==='CUE'}}" class="cue-image-caption">
+          <text>选定时长 · 支付后确认租赁</text>
+          <text>归还交前台验收 · 费用计入本局</text>
+        </view>
+      </view>
+      <view class="service-detail-head">
+        <view class="section-eyebrow">{{serviceSelected.kind==='COACH'?'MEET YOUR COACH':serviceSelected.brand}}</view>
+        <view class="service-detail-title">{{serviceSelected.name}}</view>
+        <view wx:if="{{serviceSelected.kind==='COACH'}}" class="detail-grade"><text>{{serviceSelected.starsText}}</text> {{serviceSelected.grade_title}}</view>
+        <view class="detail-price">¥{{serviceSelected.hourlyText}}<text>/ 小时</text></view>
+      </view>
+      <block wx:if="{{serviceSelected.kind==='COACH'}}">
+        <view class="profile-facts">
+          <view>
+            <text>{{serviceSelected.gender}}</text>
+            <view>性别</view>
+          </view>
+          <view>
+            <text>{{serviceSelected.age}}岁</text>
+            <view>年龄</view>
+          </view>
+          <view>
+            <text>{{serviceSelected.height_cm}}cm</text>
+            <view>身高</view>
+          </view>
+          <view>
+            <text>{{serviceSelected.weight_kg}}kg</text>
+            <view>体重</view>
+          </view>
+        </view>
+        <view class="detail-section">
+          <view class="detail-section-title">认识一下</view>
+          <view class="detail-personality">{{serviceSelected.personality}}</view>
+          <view>{{serviceSelected.description}}</view>
+        </view>
+        <view class="detail-section">
+          <view class="detail-section-title">擅长项目</view>
+          <view>{{serviceSelected.specialties}}</view>
+        </view>
+        <view class="demo-people-note">助教资料为示例</view>
+      </block>
+      <view wx:else class="detail-section">
+        <view class="detail-section-title">球杆资料与租赁</view>
+        <view class="cue-description">{{serviceSelected.description || "门店暂未填写球杆介绍"}}</view>
+      </view>
+      <view wx:if="{{serviceSelected.kind==='COACH'}}" class="detail-section">
+        <view class="detail-section-title">服务计费</view>
+        <view>选定助教后开始计时，费用计入本局账单。</view>
+      </view>
+      <view class="detail-booking-bar">
+        <view>
+          <view
+            class="availability-badge {{serviceSelected.available>0 ? 'availability-open' : 'availability-busy'}}"
+          >{{serviceSelected.kind==='CUE' ? (serviceSelected.available>0 ? '可租 '+serviceSelected.available+' 根' : '暂时租完') : (serviceSelected.available>0 ? '可预约' : '服务中')}}</view>
+          <view class="detail-price">¥{{serviceSelected.hourlyText}}<text>/小时</text></view>
+        </view>
+        <button
+          data-id="{{serviceSelected.id}}"
+          bindtap="bookService"
+          loading="{{busy}}"
+          disabled="{{busy||!serviceSelected.enabled||serviceSelected.available<1}}"
+        >{{serviceSelected.available>0?(serviceSelected.kind==='CUE'?'申请租赁这支球杆':'选择'+serviceSelected.name):'暂不可预约'}}</button>
+      </view>
+    </block>
+    <block wx:elif="{{selected}}">
+      <view class="back" bindtap="back">‹ 返回大厅</view>
+      <view class="section-eyebrow">START YOUR GAME</view>
+      <view class="page-title">为这一局，选个套餐</view>
+      <view class="selected-table">
+        <view class="row">
+          <view>
+            <view class="table-number">{{selected.table_no}}</view>
+            <view class="subtle">{{selected.type}} · {{selected.brand}} {{selected.model_name}}</view>
+          </view>
+          <view class="pill {{selected.status}}">{{labels[selected.status]}}</view>
+        </view>
+        <view class="selected-photo">
+          <image wx:if="{{selected.image_path}}" src="{{selected.imageSrc}}" mode="aspectFit" />
+          <view wx:else>{{selected.brand}}</view>
+        </view>
+      </view>
+      <view class="section-title">选择时长<text class="section-note">当前球桌套餐价格</text></view>
+      <view
+        wx:for="{{packages}}"
+        wx:key="id"
+        class="package {{packageId===item.id?'chosen':''}}"
+        data-id="{{item.id}}"
+        bindtap="pack"
+      >
+        <view class="row">
+          <view class="radio">{{packageId===item.id?'✓':''}}</view>
+          <view class="package-copy">
+            <view class="package-name">{{item.name}}</view>
+            <view class="subtle">{{item.minutes}} 分钟 · 开台后开始计时</view>
+          </view>
+          <view class="price"><text class="currency">¥</text>{{item.price}}</view>
+        </view>
+      </view>
+      <view wx:if="{{!packages.length}}" class="empty">暂无在售套餐，请联系前台。</view>
+      <view class="paybar">
+        <view>
+          <view class="subtle">应付合计</view>
+          <view class="price">¥{{chosenPackage?chosenPackage.price:'0.00'}}</view>
+        </view>
+        <button
+          wx:if="{{selected.status==='IDLE'}}"
+          bindtap="open"
+          loading="{{busy}}"
+          disabled="{{busy||!chosenPackage}}"
+        >{{isDemo?'支付并开台':'去付款 →'}}</button>
+        <button wx:else disabled>球桌暂不可用</button>
+      </view>
+    </block>
+    <block wx:elif="{{detail}}">
+      <view class="back" bindtap="back">‹ 返回订单</view>
+      <view class="section-eyebrow">YOUR GAME · SERVICES</view>
+      <view class="bill-heading">
+        <view class="page-title">这一局，明白消费。</view>
+        <button
+          class="bill-refresh"
+          bindtap="refreshBill"
+          loading="{{busy}}"
+          disabled="{{busy||!detail}}"
+        >刷新账单</button>
+      </view>
+      <view wx:if="{{billLoading && !bill}}" class="empty">正在核对本局账单…</view>
+      <block wx:if="{{bill}}">
+        <view class="session-bill">
+          <view class="row">
+            <view class="bill-table-number">{{detail.table_no}}</view>
+            <text class="bill-state">{{bill.stateText}}</text>
+          </view>
+          <view class="bill-package-name">{{detail.package_name}} · {{detail.minutes}} 分钟</view>
+          <view class="bill-paid-line">
+            <text>{{detail.tablePaidLabel}}</text>
+            <text>¥{{bill.tablePaidText}}</text>
+          </view>
+          <view class="bill-quiet">球桌套餐已支付，结算服务时不会重复收取。</view>
+          <view class="receipt-line">
+            <text>开始时间</text>
+            <text>{{detail.startText}}</text>
+          </view>
+          <view class="receipt-line">
+            <text>{{detail.status==='ACTIVE'?'套餐预计到时':'球桌结束时间'}}</text>
+            <text>{{detail.status==='ACTIVE'?detail.endText:detail.finishText}}</text>
+          </view>
+          <view class="bill-order-no">{{detail.order_no}}</view>
+        </view>
+        <view class="section-title">本局服务明细<text class="section-note">{{bill.services.length}} 项</text></view>
+        <view wx:if="{{!bill.services.length}}" class="bill-empty">本局还没有助教或球杆服务。</view>
+        <view wx:for="{{bill.services}}" wx:key="id" class="bill-service">
+          <view class="row">
+            <view class="bill-service-title">{{item.item_name}}</view>
+            <text class="bill-service-state {{item.status}}">{{item.stateText}}</text>
+          </view>
+          <view class="bill-service-meta">{{item.kind==='COACH'?'助教服务':'球杆租赁'}} · 下单价 ¥{{item.rateText}} / {{item.kind==='COACH'&&!item.booked_hours?'分钟':'小时'}}<text wx:if="{{item.booked_hours}}"> · 已订 {{item.booked_hours}} 小时</text></view>
+          <view class="bill-service-meta" wx:if="{{item.started_at}}">开始 {{item.startText}}</view>
+          <view class="bill-service-amount" wx:if="{{item.is_estimate}}">当前预估 ¥{{item.estimateText}}<text>最终金额按结束时间计算</text></view>
+          <view
+            class="bill-service-amount"
+            wx:elif="{{item.amount!==null && item.amount!==undefined}}"
+          >{{item.status==='SETTLED'?item.paymentText:'待结算'}} ¥{{item.amountText}}<text>实际使用 {{item.billed_minutes}} 分钟</text></view>
+          <view class="bill-service-tip" wx:if="{{item.kind==='CUE' && item.status==='ACTIVE'}}">球杆仍在租用，请交回前台验收。结束球桌不会自动停止球杆计时。</view>
+          <view class="bill-service-tip" wx:if="{{item.status==='REQUESTED'}}">待前台确认领取，尚未开始计时。</view>
+          <view class="record-actions">
+            <button
+              wx:if="{{item.canFinish}}"
+              class="record-button"
+              data-id="{{item.id}}"
+              bindtap="finishCoach"
+              disabled="{{busy}}"
+            >结束助教服务</button>
+            <button
+              wx:if="{{item.status==='REQUESTED'}}"
+              class="record-button secondary-record"
+              data-id="{{item.id}}"
+              bindtap="cancelService"
+              disabled="{{busy}}"
+            >取消申请</button>
+          </view>
+        </view>
+        <view class="bill-summary">
+          <view class="receipt-line">
+            <text>开台费用</text>
+            <text>¥{{bill.tablePaidText}}</text>
+          </view>
+          <view class="receipt-line">
+            <text>已结束服务合计</text>
+            <text>¥{{bill.serviceTotalText}}</text>
+          </view>
+          <view class="receipt-line" wx:if="{{detail.status==='ACTIVE'}}">
+            <text>服务当前预估合计</text>
+            <text>¥{{bill.estimateTotalText}}</text>
+          </view>
+          <view wx:if="{{detail.status==='ACTIVE'}}" class="bill-quiet">进行中的助教费用继续累计，结束本局时一并停止计时。</view>
+          <view wx:if="{{bill.pendingCueCount}}" class="return-alert">{{bill.pendingCueCount}} 根球杆待归还 · 归还确认后才能完成本局结算</view>
+          <view class="receipt-line bill-grand-total">
+            <text>开台＋服务合计</text>
+            <text>¥{{bill.totalText}}</text>
+          </view>
+          <view class="receipt-line">
+            <text>本局已付</text>
+            <text>¥{{bill.paidText}}</text>
+          </view>
+          <view wx:if="{{bill.settlementStatus==='SETTLED'}}" class="settled-note">{{bill.stateText}} · 本局无待付费用</view>
+        </view>
+        <button
+          wx:if="{{detail.status==='ACTIVE'}}"
+          class="finish-session-button"
+          data-id="{{detail.id}}"
+          bindtap="finish"
+          loading="{{busy}}"
+          disabled="{{busy}}"
+        >结束本局并生成账单</button>
+        <button
+          wx:if="{{bill.canPay}}"
+          class="settle-session-button"
+          data-id="{{detail.id}}"
+          bindtap="settle"
+          loading="{{busy}}"
+          disabled="{{busy}}"
+        >{{isDemo?'支付服务费用 ¥'+bill.unpaidText:'去付款'}}</button>
+        <button
+          wx:if="{{detail.status!=='ACTIVE' && bill.settlementStatus==='SETTLED'}}"
+          class="outline hide-detail-button"
+          data-id="{{detail.id}}"
+          data-kind="PLAY"
+          bindtap="hideRecord"
+          disabled="{{busy}}"
+        >从我的历史中移除</button>
+      </block>
+    </block>
+    <block wx:elif="{{tab==='tables'}}">
+      <view class="hero editorial">
+        <view class="hero-eyebrow">SHENGTAI BILLIARDS</view>
+        <view class="hero-title">来一局，<view>刚刚好。</view></view>
+        <view class="hero-bottom">
+          <text>中式八球 / 美式九球 / 斯诺克</text>
+        </view>
+        <view class="hero-emblem">
+          <view class="emblem-ball">8</view>
+        </view>
+      </view>
+      <view class="quick-scan" data-tab="services" bindtap="switchTab">
+        <view class="scan-icon">
+          <view class="scan-symbol"></view>
+        </view>
+        <view class="quick-copy">
+          <view>好杆相伴，好局从容</view>
+          <text>球杆租赁与台球助教 · 探索门店服务</text>
+        </view>
+        <text class="arrow">↗</text>
+      </view>
+      <view wx:if="{{active}}" class="active-mini" data-id="{{active.id}}" bindtap="showOrder">
+        <view class="row">
+          <view><text class="live-dot">●</text> {{active.table_no}} 正在使用</view>
+          <text>查看本局 ›</text>
+        </view>
+        <view class="mini-timer">{{active.elapsed}}</view>
+        <view class="subtle">{{active.remaining}}</view>
+        <view class="active-service-summary">{{active.serviceSummary}}</view>
+      </view>
+      <view wx:if="{{logged && pendingServiceCount}}" class="home-service-shortcuts">
+        <view data-kind="COACH" bindtap="openOrders">助教服务 ›</view>
+        <view data-kind="CUE" bindtap="openOrders">球杆租赁 ›</view>
+      </view>
+      <view class="section-title">挑一张喜欢的球桌<text class="section-note">{{available}} 张空闲</text></view>
+      <view class="filters">
+        <view
+          wx:for="{{['全部','中式八球','美式九球','斯诺克']}}"
+          wx:key="*this"
+          class="filter {{filter===item?'on':''}}"
+          data-value="{{item}}"
+          bindtap="setFilter"
+        >{{item}}</view>
+      </view>
+      <view class="brand-filters">
+        <view
+          wx:for="{{brandOptions}}"
+          wx:key="*this"
+          class="brand-chip {{brandFilter===item?'selected-brand':''}}"
+          data-value="{{item}}"
+          bindtap="setBrand"
+        >{{item}}</view>
+      </view>
+      <view class="result-bar">
+        <text>共 {{visibleTables.length}} 张球桌</text>
+        <view class="availability {{availableOnly?'enabled':''}}" bindtap="toggleAvailable"><text class="toggle-dot"></text>只看空闲</view>
+      </view>
+      <view wx:if="{{loading && !tables.length}}" class="empty">正在为你查看球桌…</view>
+      <view class="table-grid">
+        <view
+          wx:for="{{visibleTables}}"
+          wx:key="id"
+          class="table-card"
+          data-id="{{item.id}}"
+          bindtap="choose"
+        >
+          <view class="row">
+            <text class="table-number">{{item.table_no}}</text>
+            <text class="status-dot {{item.status}}">●</text>
+          </view>
+          <view class="subtle">{{item.type}}</view>
+          <view class="product-visual">
+            <image
+              wx:if="{{item.image_path}}"
+              class="product-photo"
+              src="{{item.imageSrc}}"
+              mode="aspectFit"
+            />
+            <view wx:else class="photo-pending">
+              <text>{{item.brand}}</text>
+              <text>{{item.model_name}}</text>
+              <text class="pending-note">型号实拍待补</text>
+            </view>
+          </view>
+          <view class="model-name">{{item.brand}} · {{item.model_name}}</view>
+          <view class="table-bottom">
+            <text>{{labels[item.status]}}</text>
+            <text class="table-link">{{item.status==='IDLE'?'选套餐 ›':'查看 ›'}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{!loading && !visibleTables.length}}" class="empty">这个分类暂时没有球桌，试试其他分类。</view>
+      <view class="footnote">所有桌上二维码为同一小程序入口，进入后在此选桌。</view>
+    </block>
+    <block wx:elif="{{tab==='services'}}">
+      <view class="section-eyebrow">THE CLUB COLLECTION</view>
+      <view class="page-title">好局，更进一步。</view>
+      <view class="service-subtitle">球杆租赁 · 助教预约</view>
+      <view class="service-record-entry" data-kind="{{serviceKind}}" bindtap="openOrders">
+        <view>
+          <text>服务进度与记录</text>
+          <view>在订单中查看、结束和结算服务</view>
+        </view>
+        <text>查看订单 ›</text>
+      </view>
+      <view class="service-segments">
+        <view
+          class="{{serviceKind==='CUE'?'segment-active':''}}"
+          data-value="CUE"
+          bindtap="setServiceKind"
+        >球杆租赁</view>
+        <view
+          class="{{serviceKind==='COACH'?'segment-active':''}}"
+          data-value="COACH"
+          bindtap="setServiceKind"
+        >台球助教</view>
+      </view>
+      <view class="service-banner">
+        <view>{{serviceKind==='CUE'?'一杆在手，自有分寸。':'按等级选助教，按小时预约。'}}</view>
+        <text>{{serviceKind==='CUE'?'前台验杆领取 · 按整小时向上计费':'选定时长后开始服务 · 1小时起订'}}</text>
+        <text>服务价格与可用数量以当前门店为准</text>
+      </view>
+      <view wx:if="{{serviceKind==='CUE'}}" class="service-brand-list">
+        <view
+          wx:for="{{serviceBrands}}"
+          wx:key="*this"
+          class="brand-chip {{serviceBrand===item?'selected-brand':''}}"
+          data-value="{{item}}"
+          bindtap="setServiceBrand"
+        >{{item}}</view>
+      </view>
+      <block wx:if="{{serviceKind==='COACH'}}">
+        <view class="coach-filter-row">
+          <view
+            wx:for="{{['全部','女','男']}}"
+            wx:key="*this"
+            class="coach-filter {{serviceGender===item?'coach-filter-on':''}}"
+            data-value="{{item}}"
+            bindtap="setServiceGender"
+          >{{item==='全部'?'全部助教':item+'助教'}}</view>
+        </view>
+        <view class="coach-grade-filters">
+          <view
+            wx:for="{{[0,3,4,5,6]}}"
+            wx:key="*this"
+            class="grade-filter {{serviceGrade===item?'grade-filter-on':''}}"
+            data-value="{{item}}"
+            bindtap="setServiceGrade"
+          >{{item===0?'全部等级':item+'星'}}</view>
+        </view>
+        <view class="demo-people-note">助教示例 · 按球技评定等级</view>
+      </block>
+      <view class="service-results">{{visibleServices.length}} {{serviceKind==='CUE'?'款精选球杆':'位台球助教'}}<text>点击卡片查看详情</text></view>
+      <view wx:if="{{serviceKind==='CUE'}}" class="cue-grid">
+        <view
+          class="cue-tile"
+          wx:for="{{visibleServices}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="showService"
+        >
+          <view class="cue-picture">
+            <image src="{{item.imageSrc}}" mode="aspectFit" lazy-load="true" />
+          </view>
+          <view class="cue-tile-body">
+            <view class="service-brand">{{item.brand}}</view>
+            <view class="cue-name">{{item.name}}</view>
+            <view class="cue-tile-footer">
+              <view>
+                <text class="tile-price">¥{{item.rate}}</text>
+                <text class="tile-unit">/小时</text>
+              </view>
+              <text class="tile-arrow">↗</text>
+            </view>
+            <view
+              class="tile-stock availability-badge {{item.available>0 ? 'availability-open' : 'availability-busy'}}"
+            >{{item.available>0?'可租 '+item.available+' 根':'暂时租完'}}</view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="coach-grid">
+        <view
+          class="coach-tile"
+          wx:for="{{visibleServices}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="showService"
+        >
+          <view class="coach-picture">
+            <image src="{{item.imageSrc}}" mode="aspectFill" lazy-load="true" />
+            <view class="coach-level level-{{item.star_level}}">{{item.grade_title}}</view>
+            <view
+              class="coach-availability availability-badge {{item.available>0 ? 'availability-open' : 'availability-busy'}}"
+            >{{item.available>0?'可预约':'服务中'}}</view>
+          </view>
+          <view class="coach-tile-body">
+            <view class="coach-name-row">
+              <text class="coach-name">{{item.name}}</text>
+              <text class="coach-gender">{{item.gender}} · {{item.age}}岁</text>
+            </view>
+            <view class="coach-measurements">{{item.height_cm}}cm / {{item.weight_kg}}kg</view>
+            <view class="coach-personality">{{item.personality}}</view>
+            <view class="coach-tile-footer">
+              <view>
+                <text class="tile-price">¥{{item.hourlyText}}</text>
+                <text class="tile-unit">/小时</text>
+              </view>
+              <text class="tile-arrow">↗</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{!visibleServices.length}}" class="empty">暂时没有匹配的服务，试试其他筛选。</view>
+      <view class="footnote">系列名称参考品牌资料，不作“最好”排名；实际杆型与配置以门店实物为准。</view>
+    </block>
+    <block wx:elif="{{tab==='orders'}}">
+      <view class="section-eyebrow">MY GAMES · SERVICES</view>
+      <view class="page-title">每一局，井然有序。</view>
+      <view class="ongoing" wx:if="{{active && orderFilter==='进行中'}}">
+        <view class="row">
+          <text class="ongoing-label">● 正在进行</text>
+          <text>{{active.table_no}} / {{active.package_name}}</text>
+        </view>
+        <view class="big-timer">{{active.elapsed}}</view>
+        <view class="remaining">{{active.remaining}}</view>
+        <progress
+          class="session-progress"
+          percent="{{active.progress}}"
+          stroke-width="4"
+          activeColor="{{heroAccent}}"
+          backgroundColor="{{heroTrack}}"
+        />
+        <view class="active-service-summary">{{active.serviceSummary}}</view>
+        <view class="row ongoing-bottom">
+          <text>预计到时 {{active.endText}}</text>
+          <text data-id="{{active.id}}" bindtap="showOrder">查看本局 ›</text>
+        </view>
+      </view>
+      <view class="filters record-status-filters">
+        <view
+          wx:for="{{['进行中','待结算','历史']}}"
+          wx:key="*this"
+          class="filter {{orderFilter===item?'on':''}}"
+          data-value="{{item}}"
+          bindtap="setOrderFilter"
+        >{{item}}<text wx:if="{{item==='待结算' && pendingOrderCount}}" class="pending-filter-badge">{{pendingOrderCount}}</text></view>
+      </view>
+      <view wx:if="{{logged && orderFilter==='历史'}}" class="history-toolbar">
+        <text>仅显示已结清或已取消记录</text>
+        <view class="history-management-actions">
+          <view class="history-tool-button" bindtap="toggleManageHistory">
+            <text class="history-tool-icon">{{managingHistory?'✓':'☷'}}</text>
+            <text>{{managingHistory?'完成':'管理'}}</text>
+          </view>
+          <view class="history-tool-button history-clear-tool" bindtap="clearHistory">
+            <text class="history-tool-icon">⌫</text>
+            <text>清空历史</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{!logged}}" class="empty">
+        <view class="empty-mark">8</view>
+        <view class="empty-title">登录后，管理你的每一局</view>
+        <view>球桌与附加服务按本局合并查看。</view>
+        <button bindtap="showMemberLogin">前往账号登录</button>
+      </view>
+      <block wx:else>
+        <view wx:if="{{!visibleOrders.length}}" class="empty">
+          <view class="empty-mark">8</view>
+          <view class="empty-title">暂无{{orderFilter}}的订单</view>
+          <view>{{orderFilter==='进行中'?'去球桌页选择球桌，开启新的一局。':'可切换其他状态查看。'}}</view>
+        </view>
+        <view
+          class="order-card session-order-card {{managingHistory?'history-selecting':''}} {{item.historySelected?'history-picked':''}}"
+          wx:for="{{visibleOrders}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="showOrder"
+        >
+          <view
+            wx:if="{{managingHistory}}"
+            class="history-pick-row"
+            data-id="{{item.id}}"
+            catchtap="toggleHistory"
+          >
+            <view class="history-check {{item.historySelected?'history-checked':''}}">{{item.historySelected?'✓':''}}</view>
+            <text>选择这条记录</text>
+          </view>
+          <view class="row">
+            <view class="order-table">{{item.table_no}} <text>{{item.package_name}}</text></view>
+            <text class="order-status {{item.settlement_status}}">{{item.stateText}}</text>
+          </view>
+          <view class="order-date">{{item.startText}} · {{item.minutes}} 分钟</view>
+          <view wx:if="{{item.sessionServices.length}}" class="session-service-list">
+            <view wx:for="{{item.sessionServices}}" wx:for-item="service" wx:key="id">
+              <text>{{service.kind==='COACH'?'助教':'球杆'}} · {{service.item_name}}</text>
+              <text>{{service.stateText}}</text>
+            </view>
+          </view>
+          <view class="session-order-paid">开台 ¥{{item.amountText}} · 服务 ¥{{item.serviceAmountText}}</view>
+          <view class="session-order-total">本局合计 <text>¥{{item.totalText}}</text></view>
+          <view wx:if="{{item.pending_cues}}" class="session-order-warning">{{item.pending_cues}} 根球杆待前台确认归还</view>
+          <view class="order-footer">
+            <text class="session-order-link">本局明细 ›</text>
+          </view>
+          <view class="record-actions" wx:if="{{item.canHide && !managingHistory}}">
+            <button
+              class="record-button delete-history"
+              data-id="{{item.id}}"
+              data-kind="PLAY"
+              catchtap="hideRecord"
+              disabled="{{busy}}"
+            >移除记录</button>
+          </view>
+        </view>
+      </block>
+      <view wx:if="{{logged && managingHistory && orderFilter==='历史'}}" class="history-batch-bar">
+        <view class="history-select-all" bindtap="toggleSelectAllHistory">
+          <view class="history-check {{allHistorySelected?'history-checked':''}}">{{allHistorySelected?'✓':''}}</view>
+          <text>全选当前列表</text>
+        </view>
+        <button
+          class="remove-selected-history"
+          bindtap="removeSelectedHistory"
+          disabled="{{busy||!selectedHistoryCount}}"
+        >移除所选（{{selectedHistoryCount}}）</button>
+      </view>
+      <view wx:if="{{orderFilter==='历史'}}" class="footnote">移除记录仅隐藏个人列表，门店仍保留交易记录。</view>
+    </block>
+    <block wx:else>
+      <view
+        wx:if="{{logged && profilePage}}"
+        class="profile-back-button"
+        bindtap="cancelProfile"
+        role="button"
+        aria-label="返回"
+      >
+        <text>‹</text>
+      </view>
+      <block wx:if="{{logged && profilePage==='leaderboard'}}">
+        <view class="power-board-heading">
+          <view class="board-kicker">SHENGTAI · HALL OF PLAY</view>
+          <view class="board-title">圣泰球力榜</view>
+          <view class="board-description">每一小时，都是热爱的积累。</view>
+        </view>
+        <view class="board-period-tabs">
+          <view
+            class="{{leaderPeriod==='month'?'board-period-active':''}}"
+            data-period="month"
+            bindtap="chooseLeaderPeriod"
+          >月度球王</view>
+          <view
+            class="{{leaderPeriod==='year'?'board-period-active':''}}"
+            data-period="year"
+            bindtap="chooseLeaderPeriod"
+          >年度球王</view>
+        </view>
+        <view wx:if="{{leaderError}}" class="wallet-error">{{leaderError}}</view>
+        <view wx:if="{{leaderLoading && !leaderboard}}" class="board-empty">正在汇集球友战绩…</view>
+        <block wx:if="{{leaderboard}}">
+          <view class="board-champion" wx:if="{{leaderboard.champion}}">
+            <view class="board-champion-top">
+              <text>{{leaderboard.label}} · {{leaderboard.title}}</text>
+              <text class="board-crown">♛</text>
+            </view>
+            <view class="champion-identity">
+              <view class="champion-avatar">{{leaderboard.champion.initial}}</view>
+              <view>
+                <view class="champion-name">{{leaderboard.champion.nickname}}</view>
+                <view class="champion-id">ID：{{leaderboard.champion.customerCode}}</view>
+              </view>
+              <view class="champion-number">01</view>
+            </view>
+            <view class="champion-duration">
+              <text>累计在场</text>
+              <view>{{leaderboard.champion.timeText}}</view>
+            </view>
+          </view>
+          <view class="board-list">
+            <view class="board-list-heading">
+              <text>球友排名</text>
+              <text>实际使用时长</text>
+            </view>
+            <view wx:if="{{!leaderboard.rows.length}}" class="board-empty">榜单正待开启，来成为第一位球王。</view>
+            <view
+              wx:for="{{leaderboard.rows}}"
+              wx:key="customerCode"
+              class="board-player {{item.isMe?'board-player-me':''}}"
+            >
+              <view class="board-rank rank-{{item.rank}}">{{item.rank<10?'0'+item.rank:item.rank}}</view>
+              <view class="board-avatar">{{item.initial}}</view>
+              <view class="board-player-info">
+                <view>{{item.nickname}}<text wx:if="{{item.isMe}}">我</text></view>
+                <text>ID：{{item.customerCode}}</text>
+              </view>
+              <text class="board-player-time">{{item.timeText}}</text>
+            </view>
+          </view>
+          <view class="board-my-standing">
+            <view>
+              <text>我的本{{leaderPeriod==='month'?'月':'年'}}排名</text>
+              <view>{{leaderboard.me.rank?'第 '+leaderboard.me.rank+' 名':'尚未上榜'}}</view>
+            </view>
+            <view>{{leaderboard.me.timeText}}</view>
+          </view>
+          <view class="board-footnote">按球桌实际使用时长累计，跨月、跨年的一局分段计入。相同时长按球友 ID 排序 · 榜单显示前100位。</view>
+        </block>
+      </block>
+      <block wx:if="{{logged && profilePage==='wallet'}}">
+        <view class="wt-page">
+          <view class="wt-page-heading">
+            <view>
+              <text class="wt-eyebrow">SHENGTAI WALLET</text>
+              <view class="wt-page-title">我的钱包</view>
+            </view>
+            <text class="wt-account-id">ID {{customerCode}}</text>
+          </view>
+          <view class="wt-balance-card">
+            <view class="wt-card-top">
+              <text>可用余额 · 元</text>
+              <button
+                class="wt-visibility"
+                bindtap="toggleWalletBalance"
+                aria-label="{{walletHidden?'显示余额':'隐藏余额'}}"
+              >
+                <view class="wt-eye {{walletHidden?'is-hidden':''}}"></view>
+              </button>
+            </view>
+            <view class="wt-balance">{{walletLoading && !wallet?'—':walletHidden?'••••••':walletBalance}}</view>
+            <view class="wt-card-bottom">
+              <view class="wt-secure-dot"></view>
+              <text>{{wallet.locked?'支付密码暂时锁定':wallet.pinSet?'支付密码保护中':'设置密码，开启钱包支付'}}</text>
+            </view>
+            <view class="wt-card-orbit"></view>
+          </view>
+          <view class="wt-main-actions">
+            <button class="wt-primary" bindtap="showTopup" disabled="{{walletLoading}}"><text>＋</text> 充值</button>
+            <button class="wt-secondary" bindtap="openWalletSecurity" disabled="{{walletLoading}}"><view class="wt-lock"></view> 支付安全</button>
+          </view>
+          <view class="wt-month-summary">
+            <view>
+              <text>本月充值</text>
+              <view>{{walletHidden?'••••':'¥'+walletMonthIncome}}</view>
+            </view>
+            <view>
+              <text>本月支出</text>
+              <view>{{walletHidden?'••••':'¥'+walletMonthExpense}}</view>
+            </view>
+          </view>
+          <view wx:if="{{walletNotice}}" class="wt-notice" role="status">{{walletNotice}}</view>
+          <view wx:if="{{walletError}}" class="wt-error" role="alert">{{walletError}}</view>
+          <view wx:if="{{wallet.locked}}" class="wt-lock-message">支付密码连续输错已暂时锁定，可在“支付安全”中验证身份找回。</view>
+          <view class="wt-record-heading">
+            <view>收支明细</view>
+            <text>最近50笔</text>
+          </view>
+          <view class="wt-record-filters">
+            <button
+              class="{{walletFilter==='ALL'?'is-active':''}}"
+              data-filter="ALL"
+              bindtap="chooseWalletFilter"
+            >全部</button>
+            <button
+              class="{{walletFilter==='TOPUP'?'is-active':''}}"
+              data-filter="TOPUP"
+              bindtap="chooseWalletFilter"
+            >充值</button>
+            <button
+              class="{{walletFilter==='PAYMENT'?'is-active':''}}"
+              data-filter="PAYMENT"
+              bindtap="chooseWalletFilter"
+            >支出</button>
+          </view>
+          <view class="wt-records">
+            <view wx:if="{{walletLoading && !wallet}}" class="wt-empty">正在同步钱包…</view>
+            <view wx:elif="{{!walletVisibleTransactions.length}}" class="wt-empty">
+              <view class="wt-empty-symbol">↔</view>
+              <view>暂无{{walletFilter==='TOPUP'?'充值':walletFilter==='PAYMENT'?'支出':'交易'}}记录</view>
+              <text>钱包的每一笔收支都会保存在这里</text>
+            </view>
+            <button
+              wx:for="{{walletVisibleTransactions}}"
+              wx:key="id"
+              class="wt-record"
+              data-id="{{item.id}}"
+              bindtap="openWalletRecord"
+            >
+              <view class="wt-record-symbol {{item.kind==='TOPUP'?'is-income':''}}">{{item.kind==='TOPUP'?'↙':'↗'}}</view>
+              <view class="wt-record-copy">
+                <view>{{item.title}}</view>
+                <text>{{item.dateText}}</text>
+              </view>
+              <view class="wt-record-value {{item.kind==='TOPUP'?'is-income':''}}">
+                <view>{{item.amountText}}</view>
+                <text>{{item.channelText}}</text>
+              </view>
+            </button>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{logged && profilePage==='details'}}">
+        <view class="profile-settings">
+          <view class="profile-settings-hero">
+            <button class="avatar avatar-picker" bindtap="chooseProfileAvatar" aria-label="更换头像">{{profileAvatar || '圣'}}</button>
+            <view>
+              <view class="settings-eyebrow">PLAYER PROFILE</view>
+              <view class="settings-name">{{profile.nickname || '圣泰球友'}}</view>
+              <view class="profile-detail-id">顾客 ID：{{customerCode}}</view>
+            </view>
+            <button class="avatar-action" bindtap="chooseProfileAvatar">更换头像</button>
+          </view>
+          <view class="player-profile-editor settings-form">
+            <view class="settings-form-title">基本资料</view>
+            <view class="player-fields">
+              <view>昵称<input value="{{profileDraft.nickname}}" maxlength="24" placeholder="输入昵称" bindinput="profileNickname"/></view>
+              <view>年龄<input value="{{profileDraft.age}}" type="number" maxlength="3" placeholder="选填" bindinput="profileAge"/></view>
+              <view>性别<view class="player-genders"><text wx:for="{{['男','女','不显示']}}" wx:key="*this" class="{{profileDraft.gender===item?'picked':''}}" data-value="{{item}}" bindtap="profileGender">{{item}}</text></view></view>
+            </view>
+            <button
+              class="settings-save"
+              bindtap="saveProfile"
+              loading="{{busy}}"
+              disabled="{{busy}}"
+            >保存资料</button>
+            <view wx:if="{{profileMessage}}" class="settings-message">{{profileMessage}}</view>
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <view wx:if="{{!profilePage && logged}}" class="profile-head">
+          <button
+            wx:if="{{logged}}"
+            class="avatar avatar-picker"
+            bindtap="chooseProfileAvatar"
+            aria-label="更换头像"
+          >{{profileAvatar || '圣'}}</button>
+          <view wx:else class="avatar">圣</view>
+          <view>
+            <view class="profile-identity">
+              <view class="profile-name">{{logged?(profile.nickname||'台球体验官'):'欢迎来到圣泰'}}</view>
+              <text wx:if="{{logged && customerId}}" class="profile-id">ID：{{customerCode}}</text>
+            </view>
+            <view class="subtle">{{logged ? (profile.age ? profile.age+' 岁' : '圣泰球友')+((profile.gender==='男'||profile.gender==='女')?' · '+profile.gender:'') : '登录后开启你的台球时光'}}</view>
+          </view>
+          <button
+            wx:if="{{logged}}"
+            class="profile-chevron"
+            bindtap="editProfile"
+            aria-label="编辑个人资料"
+          >›</button>
+        </view>
+        <view
+          wx:if="{{logged && membership && (!profilePage || profilePage==='membership')}}"
+          class="member-rank rank-{{membership.badge}}"
+        >
+          <view class="member-rank-heading">
+            <image
+              class="rank-emblem"
+              src="/assets/member-badges/{{membership.icon}}.png"
+              mode="aspectFit"
+            />
+            <view>
+              <text>SHENGTAI CLUB</text>
+              <view>{{membership.tier}}会员 <text class="rank-level">LV{{membership.level}}</text></view>
+            </view>
+            <button
+              wx:if="{{!profilePage}}"
+              class="rank-chevron"
+              bindtap="openMembership"
+              aria-label="查看会员等级"
+            >›</button>
+          </view>
+          <block wx:if="{{membership.level<50}}">
+            <view class="rank-progress-label">
+              <text>LV{{membership.nextLevel}} · 还差 ¥{{membership.levelRemainingText}}</text>
+              <text>{{membership.levelPercent}}%</text>
+            </view>
+            <progress
+              class="rank-progress"
+              percent="{{membership.levelPercent}}"
+              activeColor="{{themeAccent}}"
+              backgroundColor="{{themeLine}}"
+              stroke-width="4"
+              border-radius="6"
+            />
+            <view class="rank-progress-label">
+              <text>{{membership.nextTier || '满级'}} · 还差 ¥{{membership.tierRemainingText}}</text>
+              <text>{{membership.tierPercent}}%</text>
+            </view>
+            <progress
+              class="rank-progress"
+              percent="{{membership.tierPercent}}"
+              activeColor="{{themeAccent}}"
+              backgroundColor="{{themeLine}}"
+              stroke-width="4"
+              border-radius="6"
+            />
+          </block>
+          <view wx:else class="member-rank-caption">已达到最高等级</view>
+        </view>
+        <block wx:if="{{profilePage==='membership' && membership}}">
+          <view class="rank-summary">
+            <view>
+              <view class="settings-eyebrow">累计等级消费</view>
+              <view class="rank-summary-amount">¥{{membership.spendText}}</view>
+              <view class="subtle">按累计消费记录计算</view>
+            </view>
+            <view class="skin-chip rank-{{membership.badge}}">
+              <text>支付皮肤</text>
+              <view>{{membership.tier}} · 使用中</view>
+            </view>
+          </view>
+          <view class="player-profile-editor rank-details">
+            <view class="settings-form-title">会员等级一览</view>
+            <view
+              wx:for="{{membership.tiers}}"
+              wx:key="name"
+              class="rank-detail-row {{membership.tier===item.name?'rank-detail-active':''}}"
+            >
+              <image src="/assets/member-badges/{{item.badge}}.png" mode="aspectFit" />
+              <view class="rank-detail-title">
+                <text>{{item.name}}</text>
+                <text wx:if="{{membership.tier===item.name}}" class="rank-current-tag">当前</text>
+                <view class="subtle">{{item.levels}}</view>
+              </view>
+              <view class="rank-detail-price">¥{{item.minimumText}}<view class="subtle">累计消费门槛</view></view>
+            </view>
+          </view>
+        </block>
+        <view wx:if="{{profilePage==='skins'}}" class="skin-picker">
+          <view class="skin-picker-heading">我的皮肤</view>
+          <view class="skin-category-tabs">
+            <button
+              class="{{skinCategory==='interface'?'is-active':''}}"
+              data-category="interface"
+              bindtap="chooseSkinCategory"
+            >界面皮肤</button>
+            <button
+              class="{{skinCategory==='exclusive'?'is-active':''}}"
+              data-category="exclusive"
+              bindtap="chooseSkinCategory"
+            >专属皮肤</button>
+          </view>
+          <block wx:if="{{skinCategory==='interface'}}">
+            <view class="subtle">当前等级及以下配色可用</view>
+            <button
+              class="skin-auto {{skinMode==='auto' && exclusiveSkinKey==='none'?'skin-selected':''}}"
+              data-value="auto"
+              bindtap="selectSkin"
+            >
+              <text>跟随会员等级</text>
+              <text>{{skinMode==='auto' && exclusiveSkinKey==='none'?'✓ 使用中':'自动切换'}}</text>
+            </button>
+            <view class="skin-options">
+              <button
+                wx:for="{{skinOptions}}"
+                wx:key="key"
+                class="skin-option {{skinMode===item.key && exclusiveSkinKey==='none'?'skin-selected':''}} {{item.locked?'skin-locked':''}}"
+                disabled="{{item.locked}}"
+                data-value="{{item.key}}"
+                bindtap="selectSkin"
+              >
+                <view class="skin-sample theme-{{item.key}}">
+                  <view></view>
+                </view>
+                <view class="skin-option-name">
+                  <text>{{item.name}}</text>
+                  <text wx:if="{{item.locked}}" class="skin-unlock">{{item.tier}}解锁</text>
+                  <text wx:elif="{{skinMode===item.key && exclusiveSkinKey==='none'}}">✓</text>
+                </view>
+              </button>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="exclusive-heading">
+              <view>换一种风格，开启下一局</view>
+              <text>黄金会员解锁全部专属皮肤</text>
+            </view>
+            <button
+              class="exclusive-default {{exclusiveSkinKey==='none'?'is-active':''}}"
+              data-value="none"
+              bindtap="selectExclusiveSkin"
+            >
+              <view>使用界面配色</view>
+              <text>{{exclusiveSkinKey==='none'?'当前使用':'恢复基础外观'}}</text>
+            </button>
+            <view class="exclusive-grid">
+              <button
+                wx:for="{{exclusiveOptions}}"
+                wx:key="key"
+                class="exclusive-option {{exclusiveSkinKey===item.key?'is-selected':''}} {{item.locked?'is-locked':''}}"
+                data-value="{{item.key}}"
+                disabled="{{item.locked}}"
+                bindtap="selectExclusiveSkin"
+              >
+                <view class="exclusive-preview preview-{{item.key}}">
+                  <view class="preview-sidebar"></view>
+                  <view class="preview-surface">
+                    <view></view>
+                    <view></view>
+                    <view></view>
+                  </view>
+                  <view class="preview-ball"></view>
+                </view>
+                <view class="exclusive-option-title">{{item.name}}<text wx:if="{{exclusiveSkinKey===item.key}}">✓</text></view>
+                <view class="exclusive-description">{{item.description}}</view>
+                <view class="exclusive-unlock">{{item.locked?item.tier+'会员解锁':exclusiveSkinKey===item.key?'已启用':'已解锁'}}</view>
+              </button>
+            </view>
+          </block>
+        </view>
+        <block wx:if="{{!profilePage}}">
+          <view wx:if="{{!logged && memberLogin}}" class="auth-composition">
+            <view class="auth-brand-line">
+              <text>SHENGTAI BILLIARDS</text>
+              <view>8</view>
+            </view>
+            <view class="auth-welcome">{{authMode==='register'?'好球友，从这里开始。':'欢迎回来，球友。'}}</view>
+            <view class="auth-tagline">一席青毡，一局从容。</view>
+            <view class="auth-form-card">
+              <view class="auth-mode-tabs">
+                <view
+                  data-mode="login"
+                  bindtap="setAuthMode"
+                  class="{{authMode==='login'?'selected':''}}"
+                >账号登录</view>
+                <view
+                  data-mode="register"
+                  bindtap="setAuthMode"
+                  class="{{authMode==='register'?'selected':''}}"
+                >注册账号</view>
+              </view>
+              <view class="auth-field">
+                <text>账号</text>
+                <input
+                  placeholder="4—24 位字母或数字"
+                  maxlength="24"
+                  value="{{memberUsername}}"
+                  bindinput="memberUsername"
+                />
+              </view>
+              <view class="auth-field">
+                <text>密码</text>
+                <input
+                  placeholder="至少 8 位密码"
+                  password
+                  value="{{memberPassword}}"
+                  bindinput="memberPassword"
+                />
+              </view>
+              <button
+                class="auth-submit"
+                bindtap="submitMemberAuth"
+                loading="{{busy}}"
+                disabled="{{busy}}"
+              >{{authMode==='register'?'创建我的球友档案':'进入圣泰'}} <text>↗</text></button>
+              <view class="auth-form-foot">{{authMode==='register'?'注册后即可选桌、预约服务与使用钱包':'登录后，你的每一局都有迹可循'}}</view>
+            </view>
+          </view>
+          <button wx:if="{{!logged && !memberLogin}}" bindtap="login" loading="{{busy}}">进入球友档案</button>
+          <view wx:if="{{logged}}" class="profile-stats">
+            <view>
+              <text>{{orders.length}}</text>
+              <view>最近订单</view>
+            </view>
+            <view>
+              <text>{{playedTime}}</text>
+              <view>累计打球时长</view>
+            </view>
+            <view>
+              <text>¥{{totalSpent}}</text>
+              <view>总消费</view>
+            </view>
+          </view>
+          <view class="menu profile-menu-refined">
+            <view wx:if="{{logged}}" class="menu-item" bindtap="openWallet">
+              <view class="menu-symbol">
+                <view class="wallet-glyph"></view>
+              </view>
+              <text>圣泰钱包</text>
+              <text class="menu-trailing">{{walletHidden?'••••':'¥'+walletBalance}} ›</text>
+            </view>
+            <view class="menu-item" bindtap="rules">
+              <view class="menu-symbol">i</view>
+              <text>开台须知</text>
+              <text class="menu-trailing">›</text>
+            </view>
+            <view wx:if="{{logged && customerId}}" class="menu-item" bindtap="openSkins">
+              <view class="menu-symbol">◈</view>
+              <text>界面皮肤</text>
+              <text class="menu-trailing">›</text>
+            </view>
+            <view wx:if="{{logged && customerId}}" class="menu-item" bindtap="openExclusiveSkins">
+              <view class="menu-symbol">✧</view>
+              <view>
+                <text>专属皮肤</text>
+                <view class="menu-subtitle">科技 · 复古 · 黄金全解锁</view>
+              </view>
+              <text class="menu-trailing">›</text>
+            </view>
+            <view wx:if="{{logged}}" class="menu-item" bindtap="openLeaderboard">
+              <view class="menu-symbol">♛</view>
+              <view>
+                <text>圣泰球力榜</text>
+                <view class="menu-subtitle">月度球王 · 年度球王</view>
+              </view>
+              <text class="menu-trailing">›</text>
+            </view>
+          </view>
+          <button wx:if="{{logged}}" class="outline" bindtap="logout">退出登录</button>
+          <view class="footnote">永州圣泰台球俱乐部 · 一席青毡，一局从容</view>
+        </block>
+      </block>
+    </block>
+  </view>
+  <view
+    class="bottom-nav dock"
+    wx:if="{{!selected && !detail && !serviceSelected && !profilePage}}"
+  >
+    <view class="nav-item {{tab==='tables'?'nav-active':''}}" data-tab="tables" bindtap="switchTab">
+      <view class="nav-drawing table-drawing"></view>
+      <text>球桌</text>
+      <view class="nav-indicator"></view>
+    </view>
+    <view
+      class="nav-item {{tab==='services'?'nav-active':''}}"
+      data-tab="services"
+      bindtap="switchTab"
+    >
+      <view class="nav-drawing service-drawing"></view>
+      <text>服务</text>
+      <view class="nav-indicator"></view>
+    </view>
+    <view class="nav-item {{tab==='orders'?'nav-active':''}}" data-tab="orders" bindtap="switchTab">
+      <view class="nav-drawing order-drawing"></view>
+      <text>订单</text>
+      <text wx:if="{{orderBadge}}" class="nav-count">{{orderBadge}}</text>
+      <view class="nav-indicator"></view>
+    </view>
+    <view
+      class="nav-item {{tab==='profile'?'nav-active':''}}"
+      data-tab="profile"
+      bindtap="switchTab"
+    >
+      <view class="nav-drawing profile-drawing"></view>
+      <text>我的</text>
+      <view class="nav-indicator"></view>
+    </view>
+  </view>
+</view>
+<include src="./views/payment-result.wxml" />
+<include src="./views/service-booking.wxml" />
+<include src="./views/wallet-panels.wxml" />
+<include src="./views/prompt.wxml" />
+<include src="./views/scan-payment.wxml" />

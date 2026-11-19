@@ -1,0 +1,20 @@
+[Unit]
+Description=Shengtai Billiard Backend
+After=network.target mysql.service
+Requires=mysql.service
+
+[Service]
+User=shengtai
+Group=shengtai
+WorkingDirectory=/opt/shengtai/backend
+EnvironmentFile=/etc/shengtai/backend.env
+ExecStart=/usr/bin/java -Xms64m -Xmx384m -XX:MaxMetaspaceSize=160m -XX:+UseSerialGC -XX:ReservedCodeCacheSize=48m -jar /opt/shengtai/backend/server.jar
+Restart=on-failure
+RestartSec=8
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

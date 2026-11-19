@@ -1,0 +1,49 @@
+<view
+  wx:if="{{!isDemo && ((paymentCodeVisible && selected.status==='IDLE' && chosenPackage) || (bill.canPay && settlementCodeOrderId===detail.id))}}"
+  style="{{themeStyle}}"
+  class="app-themed payment-overlay"
+>
+  <view class="payment-backdrop" bindtap="closePayment"></view>
+  <view class="payment-sheet {{membership ? 'member-payment theme-'+skinKey : ''}}">
+    <view class="payment-heading">
+      <text>门店收款</text>
+      <button bindtap="closePayment" aria-label="关闭付款弹窗">×</button>
+    </view>
+    <view wx:if="{{membership}}" class="payment-skin-label">
+      <image src="/assets/member-badges/{{membership.icon}}.png" mode="aspectFit" />
+      <text>{{membership.tier}}会员</text>
+    </view>
+    <view class="payment-caption">{{selected ? selected.table_no + ' · ' + chosenPackage.name : '本局服务费用'}}</view>
+    <view class="payment-amount">¥{{selected ? chosenPackage.price : bill.unpaidText}}</view>
+    <image
+      class="payment-code"
+      src="/assets/store-payment.jpg"
+      mode="widthFix"
+      show-menu-by-longpress="{{true}}"
+    />
+    <view class="payment-caption">{{selected ? '请前台核对金额，确认到账后开台。' : '请前台核对金额，确认到账后结清。'}}</view>
+    <view wx:if="{{selected && logged && customerId}}" class="payment-caption">顾客 ID：{{customerCode}}，请提供给前台关联订单。</view>
+    <button class="payment-close" bindtap="closePayment">返回</button>
+  </view>
+</view>
+<view
+  wx:if="{{paidResult}}"
+  style="{{themeStyle}}"
+  class="app-themed payment-overlay paid-overlay theme-{{skinKey}}"
+>
+  <view class="payment-backdrop" bindtap="dismissPaymentSuccess"></view>
+  <view class="paid-card {{membership ? 'member-payment theme-'+skinKey : ''}}">
+    <view wx:if="{{membership}}" class="payment-skin-label">
+      <image src="/assets/member-badges/{{membership.icon}}.png" mode="aspectFit" />
+      <text>{{membership.tier}}会员</text>
+    </view>
+    <view wx:if="{{paidResult.pending}}" class="paid-wait"></view>
+    <view wx:else class="paid-mark">
+      <view class="paid-ring"></view>
+      <view class="paid-check"></view>
+    </view>
+    <view class="paid-label">{{paidResult.pending ? '正在处理订单' : '订单已确认'}}</view>
+    <view class="paid-amount">¥{{paidResult.amount}}</view>
+    <button wx:if="{{!paidResult.pending}}" bindtap="dismissPaymentSuccess">完成</button>
+  </view>
+</view>
